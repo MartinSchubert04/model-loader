@@ -1,0 +1,106 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(APP openGL) # .exe name 
+
+project(${APP} LANGUAGES C CXX)
+
+cmake_policy(SET CMP0072 NEW)
+
+# ===============================
+# General
+# ===============================
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Binarios en la raíz (como ya usás)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# ===============================
+# OpenGL / GLFW
+# ===============================
+find_package(OpenGL REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+
+# ===============================
+# Sources
+# ===============================
+set(SOURCE_FILE
+    src/main.cpp
+)
+
+set(IMGUI_SOURCES
+    include/imgui/imgui.cpp
+    include/imgui/imgui_draw.cpp
+    include/imgui/imgui_tables.cpp
+    include/imgui/imgui_widgets.cpp
+    include/imgui/imgui_impl_glfw.cpp
+    include/imgui/imgui_impl_opengl3.cpp
+)
+
+set(SOURCES
+    src/glad.c
+    include/clases/Camera.cpp
+    include/clases/Mesh.cpp
+    include/clases/Model.cpp
+    include/stb_image.cpp
+    ${IMGUI_SOURCES}
+)
+
+# ===============================
+# Executable
+# ===============================
+add_executable(${APP}
+    ${SOURCE_FILE}
+    ${SOURCES}
+)
+
+# ===============================
+# Includes (TARGET-BASED)
+# ===============================
+target_include_directories(${APP} PRIVATE
+    include
+    include/glad
+    include/GLFW
+    include/glm
+    include/imgui
+    shaders
+)
+
+# ===============================
+# ImGui loader
+# ===============================
+target_compile_definitions(${APP} PRIVATE
+    IMGUI_IMPL_OPENGL_LOADER_GLAD
+)
+
+set(ASSIMP_DIR ${CMAKE_SOURCE_DIR}/external/assimp)
+
+target_include_directories(openGL PRIVATE
+    ${ASSIMP_DIR}/include
+)
+
+add_custom_command(TARGET openGL POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${ASSIMP_DIR}/bin/libassimp-6.dll
+    $<TARGET_FILE_DIR:openGL>
+)
+
+# ===============================
+# Link libraries
+# ===============================
+target_link_libraries(${APP} PRIVATE
+    OpenGL::GL
+    glfw
+    ${ASSIMP_DIR}/lib/libassimp.dll.a
+)
+# ===============================
+# Run + Clean target
+# ===============================
+add_custom_target(run_and_clean
+    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${APP}
+    COMMAND ${CMAKE_COMMAND} -E rm -f ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${APP}${CMAKE_EXECUTABLE_SUFFIX}
+    DEPENDS ${APP}
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
