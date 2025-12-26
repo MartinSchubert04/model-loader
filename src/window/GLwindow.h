@@ -1,8 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "renderer/Render.h"
 #include "renderer/openGLrender.h"
+#include "renderer/Interface.h"
 
 // #include "renderer/ui_context.h"
 // #include "renderer/opengl_context.h"
@@ -16,7 +16,7 @@ class GLwindow : public Iwindow {
 
 public:
   GLwindow() : mIsRunning(true), mWindow(nullptr) {
-    // mUICtx = std::make_unique<UIContext>();
+    mInterface = std::make_unique<Interface>();
     mRender = std::make_unique<OpenGLrenderer>();
   }
 
@@ -49,6 +49,10 @@ private:
   bool mIsRunning;
 
   std::unique_ptr<OpenGLrenderer> mRender;
+
+  std::unique_ptr<Interface> mInterface;
+
+  // std::unique_ptr<Interface> mSceneView;
 };
 
 }  // namespace window

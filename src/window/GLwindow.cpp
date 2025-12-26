@@ -4,6 +4,10 @@
 #include "window/GLwindow.h"
 #include "window/Window.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 using namespace window;
 
 bool GLwindow::init(int width, int height, std::string title) {
@@ -13,12 +17,13 @@ bool GLwindow::init(int width, int height, std::string title) {
 
   mRender->init(this);
 
+  mInterface->init(this);
+
   return mIsRunning;
 }
 
 GLwindow::~GLwindow() {
-  // mUICtx->end();
-
+  mInterface->end();
   mRender->end();
 }
 
@@ -31,7 +36,7 @@ void GLwindow::render() {
   mRender->preRender();
 
   // Initialize UI components
-  // mUICtx->pre_render();
+  mInterface->preRender();
 
   // render scene to framebuffer and add it to scene view
   // mSceneView->render();
@@ -39,7 +44,7 @@ void GLwindow::render() {
   // mPropertyPanel->render(mSceneView.get());
 
   // Render the UI
-  // mUICtx->post_render();
+  mInterface->postRender();
 
   // Render end, swap buffers
   mRender->postRender();
