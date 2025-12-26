@@ -1,15 +1,10 @@
 #pragma once
 #include "Shader.h"
+#include "Vertex.h"
 #include <glm/glm.hpp>
 #include <string>
 
 using namespace std;
-
-struct Vertex {
-  glm::vec3 position;
-  glm::vec3 normal;
-  glm::vec2 texCoords;
-};
 
 struct Texture {
   unsigned int id;
