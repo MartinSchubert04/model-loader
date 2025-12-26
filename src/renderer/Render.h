@@ -1,12 +1,9 @@
 #pragma once
 
 #include "window/Window.h"
+#include "elements/Vertex.h"
 
 namespace render {
-
-class VertexIndexBuffer {};
-
-class FrameBuffer {};
 
 class RenderContext {
 
@@ -25,5 +22,22 @@ public:
 protected:
   window::Iwindow *mWindow;
 };
+
+class VertexIndexBuffer {
+
+private:
+  unsigned int mRedererID;
+  unsigned int mVAO, mVBO, mEBO;
+
+public:
+  VertexIndexBuffer(const std::vector<Vertex> &vertices,
+                    const std::vector<unsigned int> &indices);
+  ~VertexIndexBuffer();
+
+  virtual void bind() const = 0;
+  virtual void unbind() const = 0;
+};
+
+class FrameBuffer {};
 
 }  // namespace render
