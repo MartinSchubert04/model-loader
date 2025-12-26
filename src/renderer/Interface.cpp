@@ -6,7 +6,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-using namespace render;
+namespace render {
 
 bool Interface::init(window::Iwindow *window) {
   RenderContext::init(window);
@@ -115,3 +115,5 @@ void Interface::end() {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
+
+}  // namespace render

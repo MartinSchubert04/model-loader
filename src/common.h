@@ -30,10 +30,10 @@
 #define DEBUG
 
 #ifdef DEBUG
-#define GLCall(x) \
+#define GLcall(x) \
   GLClearError(); \
   x; \
   ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 #else
-#define GLCall(x) x
+#define GLcall(x) x
 #endif
