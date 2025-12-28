@@ -40,6 +40,19 @@ public:
   Camera(float posX, float posY, float posZ, float upX, float upY, float upZ,
          float yaw, float pitch);
 
+  Camera(const glm::vec3 &position, float fov, float aspect, float near,
+         float far) {
+    mPosition = position;
+    mAspect = aspect;
+    mNear = near;
+    mFar = far;
+    mFOV = fov;
+
+    setAspect(mAspect);
+
+    update_view_matrix();
+  }
+
   // Camera methods
   glm::mat4 GetViewMatrix();
 
@@ -48,37 +61,39 @@ public:
                             GLboolean constrainPitch = true);
   void ProcessMouseScroll(float yoffset);
 
-  void set_aspect(float aspect) {
+  // ------------------------------
+  // NEW CAMERA IMPEMENTATION
+  // ------------------------------
+
+  void setAspect(float aspect) {
     mProjection = glm::perspective(mFOV, aspect, mNear, mFar);
   }
 
-  void set_distance(float offset) {
+  void setDistance(float offset) {
     mDistance += offset;
     update_view_matrix();
   }
 
-  const glm::mat4 &get_projection() const { return mProjection; }
+  const glm::mat4 &getProjection() const { return mProjection; }
 
-  glm::mat4 get_view_projection() const {
-    return mProjection * get_view_matrix();
+  glm::mat4 getViewProjection() const {
+    return mProjection * getViewProjection();
   }
 
-  glm::vec3 get_up() const { return glm::rotate(get_direction(), cUp); }
+  glm::vec3 getUp() const { return getDirection() * cUp; }
 
-  glm::vec3 get_right() const { return glm::rotate(get_direction(), cRight); }
+  glm::vec3 getRight() const { return getDirection() * cRight; }
 
-  glm::vec3 get_forward() const {
-    return glm::rotate(get_direction(), cForward);
-  }
+  glm::vec3 getForward() const { return getDirection() * cForward; }
 
-  glm::quat get_direction() const {
+  glm::quat getDirection() const {
     return glm::quat(glm::vec3(-mPitch, -mYaw, 0.0f));
   }
 
-  glm::mat4 get_view_matrix() const { return mViewMatrix; }
+  glm::mat4 getViewMatrix() const { return mViewMatrix; }
 
   void on_mouse_wheel(double delta) {
-    set_distance(delta * 0.5f);
+    setDistance(delta * 0.5f);
 
     update_view_matrix();
   }
@@ -95,7 +110,7 @@ public:
     if (button == InputType::iRight) {
       glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.004f;
 
-      float sign = get_up().y < 0 ? -1.0f : 1.0f;
+      float sign = getUp().y < 0 ? -1.0f : 1.0f;
       mYaw += sign * delta.x * cRotationSpeed;
       mPitch += delta.y * cRotationSpeed;
 
@@ -104,8 +119,8 @@ public:
       // TODO: Adjust pan speed for distance
       glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 
-      mFocus += -get_right() * delta.x * mDistance;
-      mFocus += get_up() * delta.y * mDistance;
+      mFocus += -getRight() * delta.x * mDistance;
+      mFocus += getUp() * delta.y * mDistance;
 
       update_view_matrix();
     }
@@ -114,11 +129,11 @@ public:
   }
 
   void update_view_matrix() {
-    mPosition = mFocus - get_forward() * mDistance;
+    mPosition = mFocus - getForward() * mDistance;
 
-    glm::quat orientation = get_direction();
+    glm::quat orientation = getDirection();
     mViewMatrix =
-        glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
+        glm::translate(glm::mat4(1.0f), mPosition) * glm::mat4(orientation);
     mViewMatrix = glm::inverse(mViewMatrix);
   }
 

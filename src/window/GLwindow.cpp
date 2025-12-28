@@ -45,20 +45,20 @@ bool GLwindow::isRunning() {
 void GLwindow::render() {
   // Clear the view
   {
-    ScopedTimer t("PreRender Render");
+    // ScopedTimer t("PreRender Render");
     mRender->preRender();
   }
 
   // Initialize UI components
   {
-    ScopedTimer t("PreRender Interface");
+    // ScopedTimer t("PreRender Interface");
     mInterface->preRender();
   }
   updateFrameRate();
   // render scene to framebuffer and add it to scene view
   // mSceneView->render();
   {
-    ScopedTimer t("Draw");
+    // ScopedTimer t("Draw");
     GLuint query;
     glGenQueries(1, &query);
 
@@ -108,7 +108,7 @@ void GLwindow::render() {
     mShader->setMat4("model", model);
 
     {
-      ScopedTimer t("Draw model");
+      // ScopedTimer t("Draw model");
       glBeginQuery(GL_TIME_ELAPSED, query);
       mModel->draw(*mShader);
       glEndQuery(GL_TIME_ELAPSED);
@@ -117,7 +117,7 @@ void GLwindow::render() {
       glGetQueryObjectui64v(query, GL_QUERY_RESULT, &time);
       double gpuMs = time / 1e6;
 
-      std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
+      // std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
     }
   }
 

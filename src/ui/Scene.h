@@ -32,7 +32,7 @@ public:
 
   void render();
 
-  void load_mesh(const std::string &filepath);
+  void loadMesh(const std::string &filepath);
 
   void setMesh(std::shared_ptr<Mesh> mesh) { mMesh = mesh; }
 

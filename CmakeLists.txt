@@ -46,6 +46,7 @@ set(SOURCES
     src/renderer/GLrenderer.cpp
     src/renderer/Interface.cpp
     src/renderer/Buffers/VertexBuffer.cpp
+    src/renderer/Buffers/FrameBuffer.cpp
     src/renderer/Buffers/VertexArray.cpp
     src/renderer/Buffers/IndexBuffer.cpp
 
