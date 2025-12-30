@@ -24,7 +24,6 @@ bool GLwindow::init(int width, int height, std::string title) {
 
   mRender->init(this);
 
-  stbi_set_flip_vertically_on_load(true);
   mModel = std::make_unique<Model>("resources/model/backpack.obj");
   mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
 
@@ -61,9 +60,6 @@ void GLwindow::render() {
     // ScopedTimer t("Draw");
     GLuint query;
     glGenQueries(1, &query);
-
-    {
-    }
 
     mShader->use();
 
@@ -107,18 +103,16 @@ void GLwindow::render() {
                   1.0f));  // it's a bit too big for our scene, so scale it down
     mShader->setMat4("model", model);
 
-    {
-      // ScopedTimer t("Draw model");
-      glBeginQuery(GL_TIME_ELAPSED, query);
-      mModel->draw(*mShader);
-      glEndQuery(GL_TIME_ELAPSED);
+    // ScopedTimer t("Draw model");
+    glBeginQuery(GL_TIME_ELAPSED, query);
+    mModel->draw(*mShader);
+    glEndQuery(GL_TIME_ELAPSED);
 
-      GLuint64 time;
-      glGetQueryObjectui64v(query, GL_QUERY_RESULT, &time);
-      double gpuMs = time / 1e6;
+    GLuint64 time;
+    glGetQueryObjectui64v(query, GL_QUERY_RESULT, &time);
+    double gpuMs = time / 1e6;
 
-      // std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
-    }
+    // std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
   }
 
   // mPropertyPanel->render(mSceneView.get());
