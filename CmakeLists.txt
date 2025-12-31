@@ -54,6 +54,7 @@ set(SOURCES
     src/elements/Mesh.cpp
     src/elements/Model.cpp
     src/elements/Shader.cpp
+    src/elements/Texture.cpp
     src/common.cpp
 
     include/stb/stb_image.cpp

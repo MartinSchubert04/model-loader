@@ -3,23 +3,18 @@
 #include "Shader.h"
 #include "Vertex.h"
 #include "Buffers/VertexArray.h"
+#include "Texture.h"
 
 using namespace render;
-
-struct Texture {
-  unsigned int id;
-  std::string type;
-  std::string path;
-};
 
 class Mesh {
 public:
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
-  std::vector<Texture> textures;
+  std::vector<std::shared_ptr<Texture>> textures;
 
   Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-       std::vector<Texture> textures);
+       std::vector<std::shared_ptr<Texture>> textures);
   ~Mesh();
 
   void draw(Shader &shader);

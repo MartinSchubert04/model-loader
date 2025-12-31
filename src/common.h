@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
+#include <chrono>
 
 // GL includes
 #include <glad/glad.h>

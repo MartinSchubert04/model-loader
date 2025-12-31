@@ -1,7 +1,7 @@
 #include "Mesh.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-           std::vector<Texture> textures)
+           std::vector<std::shared_ptr<Texture>> textures)
     : va() {
   this->vertices = vertices;
   this->indices = indices;
@@ -39,20 +39,19 @@ void Mesh::draw(Shader &shader) {
   unsigned int diffuseNr = 1;
   unsigned int specularNr = 1;
   for (unsigned int i = 0; i < textures.size(); i++) {
-    GLcall(glActiveTexture(GL_TEXTURE0 +
-                           i));  // activate proper texture unit before binding
-    // retrieve texture number (the N in diffuse_textureN)
+
     std::string number;
-    std::string name = textures[i].type;
+    std::string name = textures[i]->getType();
     if (name == "texture_diffuse")
       number = std::to_string(diffuseNr++);
     else if (name == "texture_specular")
       number = std::to_string(specularNr++);
 
     shader.setInt(("material." + name + number).c_str(), i);
-    GLcall(glBindTexture(GL_TEXTURE_2D, textures[i].id));
+    textures[i]->bind(i);
   }
-  GLcall(glActiveTexture(GL_TEXTURE0));
+
+  // GLcall(glActiveTexture(GL_TEXTURE0));
 
   va.bind();
   GLcall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
