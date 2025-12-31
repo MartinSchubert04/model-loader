@@ -32,6 +32,8 @@ uniform Material material;
 in vec2 TexCoord;
 in vec3 normal;
 in vec3 FragPos;
+in float UseTexture;
+in vec4 Color;
 
 uniform vec3 viewPos;
 uniform sampler2D texture_diffuse1;
@@ -46,7 +48,11 @@ void main()
 
     result += calcSpotLight(spotLight, norm, FragPos, viewDir);
 
-    FragColor = vec4(result, 1.0);
+    if (int(UseTexture) == 0) {
+        FragColor = Color;
+    } else {
+        FragColor = vec4(result, 1.0);
+    }
 }
 
 vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {

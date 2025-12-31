@@ -47,11 +47,19 @@ public:
   void handleInput();
 
   void setTitle(std::string newTitle);
-  void updateFrameRate();
+  void updateTitle();
+
+  float getFPS();
 
 private:
   GLFWwindow *mWindow;
   bool mIsRunning;
+
+  float mDeltaTime = 0.0f;
+  float mLastFrame = 0.0f;
+  float mPreviousTime;
+  int mFrameCount = 0;
+  float mFPS;
 
   std::unique_ptr<Model> mModel;
   std::unique_ptr<Shader> mShader;

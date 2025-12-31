@@ -2,11 +2,6 @@
 #include "GLFW/glfw3.h"
 #include "common.h"
 #include "window/GLwindow.h"
-#include "window/Window.h"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 #include "elements/Camera.h"
 #include "elements/Model.h"
@@ -24,6 +19,7 @@ bool GLwindow::init(int width, int height, std::string title) {
 
   mRender->init(this);
 
+  mPreviousTime = glfwGetTime();
   mModel = std::make_unique<Model>("resources/model/backpack.obj");
   mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
 
@@ -53,7 +49,7 @@ void GLwindow::render() {
     // ScopedTimer t("PreRender Interface");
     mInterface->preRender();
   }
-  updateFrameRate();
+  updateTitle();
   // render scene to framebuffer and add it to scene view
   // mSceneView->render();
   {
@@ -65,6 +61,8 @@ void GLwindow::render() {
 
     mShader->setFloat("time", glfwGetTime());
     mShader->setVec3("viewPos", mCamera.Position);
+    mShader->setFloat("UseTexture", 1.0f);
+    mShader->setVec4("Color", 0.8, 0.8, 0.8, 1.0f);
 
     // spot light
     mShader->setVec3("spotLight.position", mCamera.Position);
@@ -104,15 +102,7 @@ void GLwindow::render() {
     mShader->setMat4("model", model);
 
     // ScopedTimer t("Draw model");
-    glBeginQuery(GL_TIME_ELAPSED, query);
     mModel->draw(*mShader);
-    glEndQuery(GL_TIME_ELAPSED);
-
-    GLuint64 time;
-    glGetQueryObjectui64v(query, GL_QUERY_RESULT, &time);
-    double gpuMs = time / 1e6;
-
-    // std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
   }
 
   // mPropertyPanel->render(mSceneView.get());
@@ -169,20 +159,24 @@ void GLwindow::onScroll(double delta) {}
 
 void GLwindow::setTitle(std::string newTitle) {}
 
-void GLwindow::updateFrameRate() {
-  static float lastTime = 0.0f;
-  static int frames = 0;
+void GLwindow::updateTitle() {
 
-  float currentTime = glfwGetTime();
-  frames++;
+  glfwSetWindowTitle(mWindow,
+                     std::format("{} | FPS: {:.2f}", title, getFPS()).c_str());
+}
 
-  if (currentTime - lastTime >= 1.f) {
-    float fps = frames / (currentTime - lastTime);
+float GLwindow::getFPS() {
+  float currentFrame = glfwGetTime();
+  mDeltaTime = currentFrame - mLastFrame;
+  mLastFrame = currentFrame;
+  mFrameCount++;
 
-    glfwSetWindowTitle(
-        mWindow, (this->title + " | FPS: " + std::to_string((int)fps)).c_str());
+  if (currentFrame - mPreviousTime >= 1) {
+    mFPS = mFrameCount / (currentFrame - mPreviousTime);
 
-    frames = 0;
-    lastTime = currentTime;
+    mPreviousTime = currentFrame;
+    mFrameCount = 0;
   }
+
+  return std::round(mFPS * 100.0) / 100.0;
 }
