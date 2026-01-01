@@ -2,7 +2,7 @@ name: Cross-Platform Build & Release
 
 on:
   push:
-    branches: [ "main", "workflow" ]
+    branches: [ "main" ]
     tags:
       - 'v*'
   pull_request:
