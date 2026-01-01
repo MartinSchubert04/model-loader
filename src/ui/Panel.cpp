@@ -35,10 +35,15 @@ void Panel::render(UI::Scene *scene) {
 
   ImGui::End();
 
+  mConsole.draw();
+
   mFileDialog.Display();
   if (mFileDialog.HasSelected()) {
-    auto file_path = mFileDialog.GetSelected().string();
-    mCurrentFile = file_path.substr(file_path.find_last_of("/\\") + 1);
+    std::filesystem::path selectedPath = mFileDialog.GetSelected();
+
+    std::string file_path = selectedPath.generic_string();
+
+    mCurrentFile = selectedPath.filename().string();
 
     mModelLoadCallback(file_path);
 

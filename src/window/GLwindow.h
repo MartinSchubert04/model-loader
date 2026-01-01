@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "renderer/GLrenderer.h"
-#include "renderer/Interface.h"
+#include "renderer/UIcontext.h"
 #include "elements/Camera.h"
 #include "elements/Shader.h"
 #include "elements/Model.h"
@@ -18,7 +18,7 @@ class GLwindow : public Iwindow {
 public:
   GLwindow() : mIsRunning(true), mWindow(nullptr) {
 
-    mInterface = std::make_unique<Interface>();
+    mUIcontext = std::make_unique<UIcontext>();
     mRender = std::make_unique<GLrenderer>();
   }
 
@@ -59,7 +59,7 @@ private:
   std::unique_ptr<Model> mModel;
   std::unique_ptr<Shader> mShader;
   std::unique_ptr<GLrenderer> mRender;
-  std::unique_ptr<Interface> mInterface;
+  std::unique_ptr<UIcontext> mUIcontext;
   std::unique_ptr<Scene> mScene;
   std::unique_ptr<Panel> mPropertyPanel;
 
@@ -69,7 +69,7 @@ private:
   void updateTitle();
   float getFPS();
 
-  // std::unique_ptr<Interface> mSceneView;
+  // std::unique_ptr<UIcontext> mSceneView;
 };
 
 }  // namespace window

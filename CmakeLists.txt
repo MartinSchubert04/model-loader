@@ -44,7 +44,7 @@ set(SOURCES
     src/window/GLwindow.cpp
 
     src/renderer/GLrenderer.cpp
-    src/renderer/Interface.cpp
+    src/renderer/UIcontext.cpp
     src/renderer/Buffers/VertexBuffer.cpp
     src/renderer/Buffers/FrameBuffer.cpp
     src/renderer/Buffers/VertexArray.cpp

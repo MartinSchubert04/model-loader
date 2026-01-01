@@ -1,10 +1,10 @@
-#include "Interface.h"
+#include "UIcontext.h"
 #include "common.h"
 #include "window/Window.h"
 
 namespace render {
 
-bool Interface::init(window::Iwindow *window) {
+bool UIcontext::init(window::Iwindow *window) {
   RenderContext::init(window);
 
   // GL 4.6 + GLSL 130
@@ -59,7 +59,7 @@ bool Interface::init(window::Iwindow *window) {
   return true;
 }
 
-void Interface::preRender() {
+void UIcontext::preRender() {
 
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
@@ -91,7 +91,7 @@ void Interface::preRender() {
   ImGui::End();
 }
 
-void Interface::postRender() {
+void UIcontext::postRender() {
   // Rendering
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -106,11 +106,8 @@ void Interface::postRender() {
   }
 }
 
-Interface::~Interface() {
-  end();
-}
+void UIcontext::end() {
 
-void Interface::end() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();

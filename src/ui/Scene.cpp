@@ -28,6 +28,11 @@ void Scene::render() {
 
   mLight->update(mShader.get());
 
+  // mShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+  // mShader->setVec3("dirLight.ambient", 0.9f, 0.9f, 0.9f);
+  // mShader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+  // mShader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
   mFrameBuffer->bind();
 
   if (mModel) {

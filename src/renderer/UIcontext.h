@@ -3,11 +3,9 @@
 
 namespace render {
 
-class Interface : public RenderContext {
+class UIcontext : public RenderContext {
 
 public:
-  ~Interface();
-
   bool init(window::Iwindow *window) override;
 
   void preRender() override;

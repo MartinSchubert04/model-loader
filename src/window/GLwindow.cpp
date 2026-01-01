@@ -28,21 +28,13 @@ bool GLwindow::init(int width, int height, std::string title) {
   mPropertyPanel->setModel_load_callback(
       [this](std::string filepath) { mScene->loadModel(filepath); });
 
-  // stbi_set_flip_vertically_on_load(true);
-  // mModel =
-  // std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
-  // mModel =
-  // std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
-
-  // mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
-
-  mInterface->init(this);
+  mUIcontext->init(this);
 
   return mIsRunning;
 }
 
 GLwindow::~GLwindow() {
-  mInterface->end();
+  mUIcontext->end();
   mRender->end();
 }
 
@@ -51,11 +43,13 @@ bool GLwindow::isRunning() {
 }
 
 void GLwindow::render() {
+  // ScopedTimer t("Window render time");
+
   // Clear the view
   mRender->preRender();
 
   // Initialize UI components
-  mInterface->preRender();
+  mUIcontext->preRender();
 
   updateTitle();
 
@@ -65,7 +59,7 @@ void GLwindow::render() {
   mPropertyPanel->render(mScene.get());
 
   // Render the UI
-  mInterface->postRender();
+  mUIcontext->postRender();
 
   // Render end, swap buffers
   mRender->postRender();
@@ -87,14 +81,14 @@ void GLwindow::onClose() {
 
 void GLwindow::handleInput() {
 
-  float deltaTime = 0.004f;
+  float speed = 5.f;
 
   if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS) {
-    mScene->onMouseWheel(-0.4f);
+    mScene->onMouseWheel(-speed * mDeltaTime);
   }
 
   if (glfwGetKey(mWindow, GLFW_KEY_S) == GLFW_PRESS) {
-    mScene->onMouseWheel(0.4f);
+    mScene->onMouseWheel(speed * mDeltaTime);
   }
 
   if (glfwGetKey(mWindow, GLFW_KEY_F) == GLFW_PRESS) {
