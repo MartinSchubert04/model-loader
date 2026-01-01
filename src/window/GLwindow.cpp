@@ -22,7 +22,10 @@ bool GLwindow::init(int width, int height, std::string title) {
   mPreviousTime = glfwGetTime();
 
   // stbi_set_flip_vertically_on_load(true);
+  // mModel =
+  // std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
   mModel = std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
+
   mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
 
   mInterface->init(this);
@@ -64,6 +67,12 @@ void GLwindow::render() {
     mShader->setFloat("time", glfwGetTime());
     mShader->setVec3("viewPos", mCamera.Position);
 
+    // directional light
+    mShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+    mShader->setVec3("dirLight.ambient", 0.9f, 0.9f, 0.9f);
+    mShader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+    mShader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
     // spot light
     mShader->setVec3("spotLight.position", mCamera.Position);
     mShader->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
@@ -101,7 +110,7 @@ void GLwindow::render() {
                   1.0f));  // it's a bit too big for our scene, so scale it down
     mShader->setMat4("model", model);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     mModel->draw(*mShader);
   }
 
