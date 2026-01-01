@@ -2,6 +2,8 @@
 
 #include "renderer/Render.h"
 
+namespace render {
+
 class FrameBuffer : render::Buffer {
 
 private:
@@ -20,3 +22,5 @@ public:
   void destroy() override;
   uint32_t getTexture() const;
 };
+
+}  // namespace render

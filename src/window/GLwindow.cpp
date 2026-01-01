@@ -2,11 +2,6 @@
 #include "GLFW/glfw3.h"
 #include "common.h"
 #include "window/GLwindow.h"
-#include "window/Window.h"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 #include "elements/Camera.h"
 #include "elements/Model.h"
@@ -24,7 +19,13 @@ bool GLwindow::init(int width, int height, std::string title) {
 
   mRender->init(this);
 
-  mModel = std::make_unique<Model>("resources/model/backpack.obj");
+  mPreviousTime = glfwGetTime();
+
+  // stbi_set_flip_vertically_on_load(true);
+  // mModel =
+  // std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
+  mModel = std::make_unique<Model>("resources/model/primitive/Icosphere.obj");
+
   mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
 
   mInterface->init(this);
@@ -53,7 +54,7 @@ void GLwindow::render() {
     // ScopedTimer t("PreRender Interface");
     mInterface->preRender();
   }
-  updateFrameRate();
+  updateTitle();
   // render scene to framebuffer and add it to scene view
   // mSceneView->render();
   {
@@ -66,6 +67,12 @@ void GLwindow::render() {
     mShader->setFloat("time", glfwGetTime());
     mShader->setVec3("viewPos", mCamera.Position);
 
+    // directional light
+    mShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+    mShader->setVec3("dirLight.ambient", 0.9f, 0.9f, 0.9f);
+    mShader->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+    mShader->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
     // spot light
     mShader->setVec3("spotLight.position", mCamera.Position);
     mShader->setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
@@ -75,8 +82,8 @@ void GLwindow::render() {
     mShader->setFloat("spotLight.constant", 1.0f);
     mShader->setFloat("spotLight.linear", 0.09f);
     mShader->setFloat("spotLight.quadratic", 0.032f);
-    mShader->setFloat("spotLight.cutOffAngle", glm::cos(glm::radians(12.5f)));
-    mShader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+    mShader->setFloat("spotLight.cutOffAngle", glm::cos(glm::radians(72.5f)));
+    mShader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(97.5f)));
 
     glm::mat4 view = glm::lookAt(mCamera.Position,
                                  mCamera.Position + mCamera.Front, mCamera.Up);
@@ -103,16 +110,8 @@ void GLwindow::render() {
                   1.0f));  // it's a bit too big for our scene, so scale it down
     mShader->setMat4("model", model);
 
-    // ScopedTimer t("Draw model");
-    glBeginQuery(GL_TIME_ELAPSED, query);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     mModel->draw(*mShader);
-    glEndQuery(GL_TIME_ELAPSED);
-
-    GLuint64 time;
-    glGetQueryObjectui64v(query, GL_QUERY_RESULT, &time);
-    double gpuMs = time / 1e6;
-
-    // std::cout << "[GPU MODEL DRAW TIME]" << gpuMs << std::endl;
   }
 
   // mPropertyPanel->render(mSceneView.get());
@@ -169,20 +168,24 @@ void GLwindow::onScroll(double delta) {}
 
 void GLwindow::setTitle(std::string newTitle) {}
 
-void GLwindow::updateFrameRate() {
-  static float lastTime = 0.0f;
-  static int frames = 0;
+void GLwindow::updateTitle() {
 
-  float currentTime = glfwGetTime();
-  frames++;
+  glfwSetWindowTitle(mWindow,
+                     std::format("{} | FPS: {:.2f}", title, getFPS()).c_str());
+}
 
-  if (currentTime - lastTime >= 1.f) {
-    float fps = frames / (currentTime - lastTime);
+float GLwindow::getFPS() {
+  float currentFrame = glfwGetTime();
+  mDeltaTime = currentFrame - mLastFrame;
+  mLastFrame = currentFrame;
+  mFrameCount++;
 
-    glfwSetWindowTitle(
-        mWindow, (this->title + " | FPS: " + std::to_string((int)fps)).c_str());
+  if (currentFrame - mPreviousTime >= 1) {
+    mFPS = mFrameCount / (currentFrame - mPreviousTime);
 
-    frames = 0;
-    lastTime = currentTime;
+    mPreviousTime = currentFrame;
+    mFrameCount = 0;
   }
+
+  return std::round(mFPS * 100.0) / 100.0;
 }

@@ -4,27 +4,28 @@
 #include "elements/Mesh.h"
 // #include "elements/light.h"
 #include "elements/Shader.h"
-#include "renderer/VertexBuffer.h"
-#include "renderer/IndexBuffer.h"
+#include "Buffers/VertexBuffer.h"
+#include "Buffers/IndexBuffer.h"
+#include "Buffers/FrameBuffer.h"
 #include "elements/Input.h"
+#include "elements/Model.h"
 
-namespace nui {
-class SceneView {
+class Scene {
 public:
-  SceneView()
+  Scene()
       : mCamera(nullptr), mFrameBuffer(nullptr), mShader(nullptr),
-        mLight(nullptr), mSize(800, 600) {
+        /*mLight(nullptr),*/ mSize(800, 600) {
+
     mFrameBuffer = std::make_unique<FrameBuffer>();
-    mFrameBuffer->create_buffers(800, 600);
-    mShader = std::make_unique<Shader>();
-    mShader->load("shaders/vs.shader", "shaders/fs_pbr.shader");
+    mFrameBuffer->create(800, 600);
+    mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
     // mLight = std::make_unique<nelems::Light>();
 
     mCamera =
         std::make_unique<Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 100.0f);
   }
 
-  ~SceneView() { mShader->unload(); }
+  ~Scene() { mShader->unload(); }
 
   // nelems::Light *get_light() { return mLight.get(); }
 
@@ -34,9 +35,9 @@ public:
 
   void loadMesh(const std::string &filepath);
 
-  void setMesh(std::shared_ptr<Mesh> mesh) { mMesh = mesh; }
+  void setMesh(std::shared_ptr<Model> model) { mModel = model; }
 
-  std::shared_ptr<Mesh> get_mesh() { return mMesh; }
+  std::shared_ptr<Model> getModel() { return mModel; }
 
   void onMouseMove(double x, double y, InputType button);
 
@@ -49,7 +50,6 @@ private:
   std::unique_ptr<FrameBuffer> mFrameBuffer;
   std::unique_ptr<Shader> mShader;
   // std::unique_ptr<nelems::Light> mLight;
-  std::shared_ptr<Mesh> mMesh;
+  std::shared_ptr<Model> mModel;
   glm::vec2 mSize;
 };
-}  // namespace nui
