@@ -2,9 +2,6 @@
 #include "common.h"
 #include "renderer/Render.h"
 
-unsigned int TextureFromFile(const char *path, const string &directory,
-                             bool gamma = false);
-
 Model::Model(string path) {
   loadModel(path);
 }
@@ -25,6 +22,11 @@ void Model::loadModel(string path) {
     cout << "ERROR::ASSIMP::" << import.GetErrorString() << endl;
     return;
   }
+
+  // Clear previous meshes and textures
+  meshes.clear();
+  texturesLoaded.clear();
+
   directory = path.substr(0, path.find_last_of('/'));
 
   processNode(scene->mRootNode, scene);
@@ -123,7 +125,8 @@ vector<shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat,
 
     bool skip = false;
     for (unsigned int j = 0; j < texturesLoaded.size(); j++) {
-      if (std::strcmp(texturesLoaded[j]->getPath().data(), path.c_str()) == 0) {
+      if (std::strcmp(texturesLoaded[j]->getPath().c_str(), path.c_str()) ==
+          0) {
         textures.push_back(texturesLoaded[j]);
         skip = true;
         break;
@@ -134,30 +137,14 @@ vector<shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial *mat,
       auto texture = make_shared<Texture>(path);
       texture->setType(typeName);
 
-      textures.push_back(texture);
-      texturesLoaded.push_back(texture);  // add to cached textures
+      if (texture->isValid()) {
+        textures.push_back(texture);
+        texturesLoaded.push_back(texture);
+      } else {
+        std::cerr << "Failed to load texture: " << path << std::endl;
+      }
     }
   }
 
   return textures;
-}
-
-Material loadMaterial(aiMaterial *mat) {
-  Material material;
-  aiColor3D color(0.f, 0.f, 0.f);
-  float shininess;
-
-  mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-  material.Diffuse = glm::vec3(color.r, color.b, color.g);
-
-  mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
-  material.Ambient = glm::vec3(color.r, color.b, color.g);
-
-  mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
-  material.Specular = glm::vec3(color.r, color.b, color.g);
-
-  mat->Get(AI_MATKEY_SHININESS, shininess);
-  material.Shininess = shininess;
-
-  return material;
 }

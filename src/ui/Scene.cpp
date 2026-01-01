@@ -19,8 +19,7 @@ void Scene::onMouseWheel(double delta) {
 }
 
 void Scene::loadModel(const std::string &filepath) {
-  if (!mModel)
-    mModel = std::make_unique<Model>(filepath);
+  mModel = std::make_unique<Model>(filepath);
 }
 
 void Scene::render() {

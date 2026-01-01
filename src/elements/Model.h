@@ -10,13 +10,6 @@
 
 using namespace std;
 
-struct Material {
-  glm::vec3 Diffuse;
-  glm::vec3 Specular;
-  glm::vec3 Ambient;
-  float Shininess;
-};
-
 class Model {
 public:
   glm::vec3 color = {1.0f, 0.0f, 0.0f};
