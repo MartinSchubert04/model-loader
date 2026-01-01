@@ -1,40 +1,76 @@
-name: CMake Build
+name: Cross-Platform Build & Release
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "main", "workflow" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
 
 jobs:
-  build:
-    runs-on: windows-latest
-
+  # JOB 1: Compilación en Linux (Para asegurar portabilidad)
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: MINGW64
-        update: true
-        install: >-
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-ninja
-          mingw-w64-x86_64-glfw
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential cmake ninja-build libglfw3-dev libassimp-dev libgl1-mesa-dev
 
-    - name: Configure CMake
-      shell: msys2 {0}
-      run: |
-        cmake -S . -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      - name: Configure and Build
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
 
-    - name: Build
-      shell: msys2 {0}
-      run: cmake --build build
+  # JOB 2: Compilación en Windows + Creación de Release
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: OpenGL-Loader-Binary
-        path: |
-          ./openGL.exe
-          ./libassimp-6.dll
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-glfw
+
+      - name: Configure and Build
+        shell: msys2 {0}
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+
+      - name: Prepare Release Assets
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          # Renombrar el ejecutable
+          mv openGL.exe engine.exe
+          # Crear un ZIP con el ejecutable, la DLL de Assimp y tus carpetas de datos
+          # Agregamos 'resources' y 'shaders' (ajusta los nombres si son distintos)
+          7z a engine-windows-x64.zip engine.exe libassimp-6.dll resources/ shaders/
+
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            engine-windows-x64.zip
+            engine.exe
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
