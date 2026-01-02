@@ -20,7 +20,23 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 # OpenGL / GLFW
 # ===============================
 find_package(OpenGL REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
+if(WIN32)
+    # En Windows seguimos como antes
+    find_package(glfw3 CONFIG REQUIRED)
+else()
+    # En Linux, forzamos la descarga de GLFW 3.4 para que ImGui no falle
+    include(FetchContent)
+    FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG 3.4
+    )
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(glfw)
+endif()
 
 # ===============================
 # Sources
