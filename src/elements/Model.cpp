@@ -14,8 +14,13 @@ void Model::draw(Shader &shader) {
 
 void Model::loadModel(string path) {
   Assimp::Importer import;
-  const aiScene *scene =
-      import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+  const uint32_t cMeshImportFlags =
+      aiProcess_CalcTangentSpace | aiProcess_Triangulate |
+      aiProcess_SortByPType | aiProcess_GenNormals | aiProcess_GenUVCoords |
+      aiProcess_OptimizeMeshes | aiProcess_ValidateDataStructure;
+
+  const aiScene *scene = import.ReadFile(path, cMeshImportFlags);
 
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
       !scene->mRootNode) {

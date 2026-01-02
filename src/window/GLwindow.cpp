@@ -74,7 +74,7 @@ void GLwindow::onClose() {
 
 void GLwindow::handleInput() {
 
-  float speed = 5.f;
+  float speed = 50.f;
 
   if (glfwGetKey(mWindow, GLFW_KEY_W) == GLFW_PRESS) {
     mScene->onMouseWheel(-speed * mDeltaTime);
