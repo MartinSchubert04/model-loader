@@ -47,9 +47,7 @@ in vec4 color;
 in float useTexture;
 
 uniform vec3 viewPos;
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
-
+uniform vec4 modelColor;
 
 void main()
 {    
@@ -63,10 +61,10 @@ void main()
     result += calcDirLight(dirLight, norm, viewDir, hasTex);
 
     if (hasTex) {
-        FragColor = vec4(result, 1.0);
+        FragColor = vec4(result, 1.0) * modelColor;
     } else {
         // Si no hay textura, mezclamos la iluminación con el color del vértice
-        FragColor = vec4(result * color.rgb, 1.0);
+        FragColor = vec4(result * color.rgb, 1.0) * modelColor;
     }
     
 }
@@ -79,7 +77,7 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, boo
     vec3 specColor = hasTex ? texture(material.texture_specular1, TexCoord).rgb : vec3(0.5);
 
      // ambient
-    vec3 ambient = light.ambient * texture(material.texture_specular1, TexCoord).rgb;
+    vec3 ambient = light.ambient * baseColor;
 
     // diffuse 
    
@@ -101,7 +99,7 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, boo
     float epsilon = light.cutOffAngle - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
-    ambient *= attenuation * intensity;
+    ambient *= attenuation;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
 
@@ -127,6 +125,7 @@ vec3 calcDirLight(DirLight light, vec3 normal, vec3 viewDir, bool hasTex) {
     vec3 reflectDir = reflect(-lightDir, normal);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
     vec3 specular = light.specular * spec * specColor; 
+    if (diff <= 0.0) specular = vec3(0.0); // Si no le da la luz, no brilla
     
     return (ambient + diffuse + specular); 
 }

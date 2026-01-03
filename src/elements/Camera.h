@@ -33,6 +33,8 @@ public:
   float MouseSensitivity;
   float Zoom;
 
+  float speed = 10.0f;
+
   // Constructors
   Camera(glm::vec3 position = glm::vec3(0.0f),
          glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW,
@@ -54,7 +56,7 @@ public:
     updateViewMatrix();
   }
 
-  // Camera methods
+  // // Camera methods
   glm::mat4 GetViewMatrix();
 
   void ProcessKeyboard(Camera_Movement direction, float deltaTime);
@@ -67,8 +69,6 @@ public:
   // ------------------------------
 
   void update(Shader *shader) {
-    glm::mat4 model{1.0f};
-    shader->setMat4("model", model);
     shader->setMat4("view", mViewMatrix);
     shader->setMat4("projection", getProjection());
     shader->setVec3("camPos", mPosition);
