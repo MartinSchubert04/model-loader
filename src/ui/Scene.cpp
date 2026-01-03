@@ -29,6 +29,8 @@ void Scene::render() {
 
   mLight->update(mShader.get());
 
+  // glEnable(GL_CULL_FACE);
+  // glCullFace(GL_BACK);
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   mFrameBuffer->bind();

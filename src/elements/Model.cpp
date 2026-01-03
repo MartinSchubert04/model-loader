@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "assimp/postprocess.h"
 #include "common.h"
 #include "renderer/Render.h"
 
@@ -23,7 +24,7 @@ void Model::update(Shader *shader) {
   float scale = 1.0f;  // Queremos que mida 1 unidad de alto
   float factor = scale / mSize.y;
 
-  if (mSize.y >= 15.f || mSize.x >= 20.f || mSize.z >= 20.f) {
+  if (mSize.y >= 20.f || mSize.x >= 20.f || mSize.z >= 20.f) {
     model = glm::scale(model, glm::vec3(factor));
   }
 
@@ -37,7 +38,8 @@ void Model::loadModel(string path) {
       aiProcess_CalcTangentSpace | aiProcess_Triangulate |
       aiProcess_SortByPType | aiProcess_GenNormals | aiProcess_GenUVCoords |
       aiProcess_OptimizeMeshes | aiProcess_ValidateDataStructure
-      /*| aiProcess_FlipUVs */;
+      /* | aiProcess_GlobalScale*/
+      /* | aiProcess_FlipUVs */;
 
   const aiScene *scene = import.ReadFile(path, cMeshImportFlags);
 
