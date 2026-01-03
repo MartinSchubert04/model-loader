@@ -10,6 +10,8 @@
 #include "Buffers/FrameBuffer.h"
 #include "elements/Input.h"
 #include "elements/Model.h"
+#include "Sim/System.h"
+#include <memory>
 
 namespace UI {
 
@@ -27,6 +29,12 @@ public:
 
     mCamera =
         std::make_unique<Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 100.0f);
+
+    std::unique_ptr<Planet> earth =
+        std::make_unique<Planet>(1, glm::vec2(40, 40), glm::vec3(0, 0, 0));
+
+    mSystem = std::make_unique<System>();
+    mSystem->addEntity(std::move(earth));
   }
 
   ~Scene() { mShader->unload(); }
@@ -59,6 +67,8 @@ private:
   std::unique_ptr<Shader> mShader;
   std::unique_ptr<Light> mLight;
   std::shared_ptr<Model> mModel;
+  std::shared_ptr<System> mSystem;
+
   glm::vec2 mSize;
 };
 

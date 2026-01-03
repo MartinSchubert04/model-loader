@@ -27,18 +27,22 @@ void Scene::render() {
 
   mShader->use();
 
+  mCamera->setAspect(mSize.x / mSize.y);
+  mCamera->update(mShader.get());
   mLight->update(mShader.get());
 
   // glEnable(GL_CULL_FACE);
   // glCullFace(GL_BACK);
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   mFrameBuffer->bind();
 
   if (mModel) {
-    mModel->draw(*mShader.get());
     mModel->update(mShader.get());
+    mModel->draw(*mShader.get());
   }
+  mSystem->update(mShader.get());
+  mSystem->draw(mShader.get());
 
   mFrameBuffer->unbind();
 
@@ -46,9 +50,6 @@ void Scene::render() {
 
   ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
   mSize = {viewportPanelSize.x, viewportPanelSize.y};
-
-  mCamera->setAspect(mSize.x / mSize.y);
-  mCamera->update(mShader.get());
 
   // add rendered texture to ImGUI scene window
   uint64_t textureID = mFrameBuffer->getTexture();
