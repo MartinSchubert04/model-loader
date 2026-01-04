@@ -39,7 +39,7 @@ public:
 
     for (auto &p : positions) {
       std::unique_ptr<Planet> sphere =
-          std::make_unique<Planet>(0.05, glm::vec2(40, 40), p);
+          std::make_unique<Planet>(0.05, glm::vec2(15, 15), p);
 
       mSystem->addEntity(std::move(sphere));
     }

@@ -6,7 +6,7 @@
 Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos)
     : radius(radius), segments(segments), position(pos), scaleFactor(1) {
 
-  float PI = 3.14;
+  float PI = 3.14159265359f;
   this->color = glm::vec4(.8, .8, .8, .8);
 
   for (int y{0}; y <= segments.y; y++) {
@@ -23,7 +23,7 @@ Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos)
       vertex.position = glm::vec3(xPos, yPos, zPos);
 
       // calculate normal
-      vertex.normal = glm::vec3(xPos, yPos, zPos) - position;
+      vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));
       vertex.texCoords = glm::vec2(0.0f, 0.0f);
       vertex.color = color;
 
