@@ -62,8 +62,14 @@ struct LogRedirector : public std::stringbuf {
   int sync() override {
     std::string msg = str();
     if (!msg.empty()) {
+      // 1. Enviar a la consola de ImGui
       console->log(msg, (stream.tie() == &std::cerr) ? 1 : 0);
-      str("");  // Limpiar buffer interno
+
+      // 2. Enviar al buffer original (La consola del sistema/IDE)
+      old_buf->sputn(msg.c_str(), msg.size());
+      old_buf->pubsync();  // Forzar el volcado a la terminal
+
+      str("");  // Limpiar buffer interno de stringbuf
     }
     return 0;
   }

@@ -41,7 +41,7 @@ void Scene::render() {
     mModel->update(mShader.get());
     mModel->draw(*mShader.get());
   }
-  mSystem->update(mShader.get());
+
   mSystem->draw(mShader.get());
 
   mFrameBuffer->unbind();

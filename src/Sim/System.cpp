@@ -9,7 +9,7 @@ void System::update(Shader *shader) {
 
 void System::draw(Shader *shader) {
   for (auto &p : planets) {
-    p->getMesh()->draw(*shader);
+    p->draw(shader);
   }
 }
 

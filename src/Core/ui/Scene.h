@@ -12,6 +12,7 @@
 #include "elements/Model.h"
 #include "Sim/System.h"
 #include <memory>
+#include <vector>
 
 namespace UI {
 
@@ -27,14 +28,21 @@ public:
     mShader = std::make_unique<Shader>("shaders/model.vs", "shaders/model.fs");
     mLight = std::make_unique<Light>();
 
-    mCamera =
-        std::make_unique<Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f, 100.0f);
+    mCamera = std::make_unique<Camera>(glm::vec3(0, 0, 3), 45.0f, 1.3f, 0.1f,
+                                       1000.0f);
 
-    std::unique_ptr<Planet> earth =
-        std::make_unique<Planet>(1, glm::vec2(40, 40), glm::vec3(0, 0, 0));
+    std::unique_ptr<Planet> container =
+        std::make_unique<Planet>(1, glm::vec2(10, 10), glm::vec3(0, 0, 0));
 
     mSystem = std::make_unique<System>();
-    mSystem->addEntity(std::move(earth));
+    std::vector<glm::vec3> positions = container->getVerticesPos();
+
+    for (auto &p : positions) {
+      std::unique_ptr<Planet> sphere =
+          std::make_unique<Planet>(0.05, glm::vec2(40, 40), p);
+
+      mSystem->addEntity(std::move(sphere));
+    }
   }
 
   ~Scene() { mShader->unload(); }

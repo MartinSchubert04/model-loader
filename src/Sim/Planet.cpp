@@ -1,7 +1,10 @@
 #include "Planet.h"
+#include "common.h"
+#include "glm/fwd.hpp"
+#include <vector>
 
 Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos)
-    : radius(radius), segments(segments), position(pos) {
+    : radius(radius), segments(segments), position(pos), scaleFactor(1) {
 
   float PI = 3.14;
   this->color = glm::vec4(.8, .8, .8, .8);
@@ -50,6 +53,8 @@ Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos)
 }
 
 void Planet::draw(Shader *shader) {
+  update(shader);
+
   mesh->draw(*shader);
 }
 
@@ -57,6 +62,20 @@ void Planet::update(Shader *shader) {
   glm::mat4 model = glm::mat4(1.0f);
   model = glm::translate(model, position);
   model = glm::scale(model, glm::vec3(radius));
+
   shader->setMat4("model", model);
   shader->setVec4("modelColor", color);
+}
+
+void Planet::scale(float scalar) {
+  scaleFactor = scalar;
+}
+
+std::vector<glm::vec3> Planet::getVerticesPos() {
+  std::vector<glm::vec3> positions;
+  for (auto &v : vertices) {
+    positions.push_back(v.position);
+  }
+
+  return positions;
 }
