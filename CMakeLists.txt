@@ -12,6 +12,7 @@ cmake_policy(SET CMP0072 NEW)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
 
 # Binarios en la raíz (como ya usás)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
@@ -57,23 +58,28 @@ set(IMGUI_SOURCES
 set(SOURCES
     src/glad.c
     src/Application.cpp
-    src/window/GLwindow.cpp
+    src/Core/window/GLwindow.cpp
 
-    src/renderer/GLrenderer.cpp
-    src/renderer/UIcontext.cpp
-    src/renderer/Buffers/VertexBuffer.cpp
-    src/renderer/Buffers/FrameBuffer.cpp
-    src/renderer/Buffers/VertexArray.cpp
-    src/renderer/Buffers/IndexBuffer.cpp
+    src/Core/renderer/GLrenderer.cpp
+    src/Core/renderer/UIcontext.cpp
+    src/Core/renderer/Buffers/VertexBuffer.cpp
+    src/Core/renderer/Buffers/FrameBuffer.cpp
+    src/Core/renderer/Buffers/VertexArray.cpp
+    src/Core/renderer/Buffers/IndexBuffer.cpp
 
-    src/elements/Camera.cpp
-    src/elements/Mesh.cpp
-    src/elements/Model.cpp
-    src/elements/Shader.cpp
-    src/elements/Texture.cpp
+    src/Core/elements/Camera.cpp
+    src/Core/elements/Mesh.cpp
+    src/Core/elements/Model.cpp
+    src/Core/elements/Shader.cpp
+    src/Core/elements/Texture.cpp
     
-    src/ui/Scene.cpp
-    src/ui/Panel.cpp
+    src/Core/ui/Scene.cpp
+    src/Core/ui/Panel.cpp
+
+    src/Sim/Planet.cpp
+    src/Sim/System.cpp
+    src/Sim/Solver.cpp
+
 
     src/common.cpp
 
@@ -95,7 +101,9 @@ add_executable(${APP}
 target_include_directories(${APP} PRIVATE
     include
     src
-    src/renderer
+    src/Core/
+    src/Sim/
+    src/Core/renderer
 )
 
 # ===============================
@@ -135,6 +143,7 @@ endif()
 # ===============================
 # Run + Clean target
 # ===============================
+
 
 # 1. Aseguramos que el ejecutable sea tipo CONSOLA
 if(MINGW OR GNUCXX)

@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "common.h"
 #include "elements/Input.h"
+#include "imgui/imgui.h"
 
 namespace UI {
 
@@ -23,10 +24,12 @@ void Scene::loadModel(const std::string &filepath) {
   mModel = std::make_unique<Model>(filepath);
 }
 
-void Scene::render() {
+void Scene::render(float delta) {
 
   mShader->use();
 
+  mCamera->setAspect(mSize.x / mSize.y);
+  mCamera->update(mShader.get());
   mLight->update(mShader.get());
 
   // glEnable(GL_CULL_FACE);
@@ -36,9 +39,23 @@ void Scene::render() {
   mFrameBuffer->bind();
 
   if (mModel) {
-    mModel->draw(*mShader.get());
     mModel->update(mShader.get());
+    mModel->draw(*mShader.get());
   }
+
+  glm::vec3 gravity = {0.f, -9.81f, 0.f};
+
+  for (auto &contBound : mContainerBoudaries) {
+    contBound->draw(mShader.get());
+  }
+
+  // mSystem->updatePhysics(gravity, delta);
+
+  mSystem->update(gravity, delta);
+  for (auto &p : mSystem->planets) {
+    p->checkCollision(mContainer->radius);
+  }
+  mSystem->draw(mShader.get());
 
   mFrameBuffer->unbind();
 
@@ -46,9 +63,6 @@ void Scene::render() {
 
   ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
   mSize = {viewportPanelSize.x, viewportPanelSize.y};
-
-  mCamera->setAspect(mSize.x / mSize.y);
-  mCamera->update(mShader.get());
 
   // add rendered texture to ImGUI scene window
   uint64_t textureID = mFrameBuffer->getTexture();
