@@ -67,7 +67,7 @@ set(SOURCES
     src/Core/renderer/Buffers/VertexArray.cpp
     src/Core/renderer/Buffers/IndexBuffer.cpp
 
-    src/Core/elements/Camera.cpp
+    src/Core/elements/CameraFPS.cpp
     src/Core/elements/Mesh.cpp
     src/Core/elements/Model.cpp
     src/Core/elements/Shader.cpp
@@ -79,9 +79,7 @@ set(SOURCES
     src/Sim/Planet.cpp
     src/Sim/System.cpp
     src/Sim/Solver.cpp
-
-
-    src/common.cpp
+    src/Sim/Grid.cpp
 
     include/stb/stb_image.cpp
     ${IMGUI_SOURCES}

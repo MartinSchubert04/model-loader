@@ -49,7 +49,7 @@ void Scene::render(float delta) {
     contBound->draw(mShader.get());
   }
 
-  // mSystem->updatePhysics(gravity, delta);
+  grid.draw(mShader.get());
 
   mSystem->update(gravity, delta);
   for (auto &p : mSystem->planets) {

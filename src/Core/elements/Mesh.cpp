@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Shader.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
            std::vector<std::shared_ptr<Texture>> textures)
@@ -37,7 +38,7 @@ void Mesh::setupMesh() {
   va.unbind();
 }
 
-void Mesh::draw(Shader &shader) {
+void Mesh::draw(Shader &shader, DrawType type) {
   unsigned int diffuseNr = 1;
   unsigned int specularNr = 1;
   for (unsigned int i = 0; i < textures.size(); i++) {
@@ -56,6 +57,18 @@ void Mesh::draw(Shader &shader) {
   // GLcall(glActiveTexture(GL_TEXTURE0));
 
   va.bind();
-  GLcall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+
+  switch (type) {
+
+  case DrawType::TRIANGLES:
+    GLcall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+    break;
+  case DrawType::LINES:
+    GLcall(glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, 0));
+    break;
+  default:
+    GLcall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+  }
+
   va.unbind();
 }

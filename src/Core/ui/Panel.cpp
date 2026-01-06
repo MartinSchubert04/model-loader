@@ -25,6 +25,7 @@ void Panel::render(UI::Scene *scene) {
                             ImGuiColorEditFlags_DisplayRGB);
     ImGui::SliderFloat("Roughness", &model->roughness, 0.0f, 1.0f);
     ImGui::SliderFloat("Metallic", &model->metallic, 0.0f, 1.0f);
+    ImGui::SliderFloat3("Size", glm::value_ptr(model->size), 0.1f, 30.0f);
   }
 
   if (ImGui::CollapsingHeader("Light")) {

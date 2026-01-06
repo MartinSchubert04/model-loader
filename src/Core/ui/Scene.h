@@ -11,8 +11,7 @@
 #include "elements/Input.h"
 #include "elements/Model.h"
 #include "Sim/System.h"
-#include <memory>
-#include <vector>
+#include "Sim/Grid.h"
 
 namespace UI {
 
@@ -95,6 +94,8 @@ private:
   std::shared_ptr<Model> mModel;
   std::shared_ptr<System> mSystem;
   std::shared_ptr<Planet> mContainer;
+
+  Grid grid = Grid(glm::vec2(200, 200), glm::vec3(.0f, -5.f, .0f));
 
   std::vector<std::unique_ptr<Planet>> mContainerBoudaries;
 
