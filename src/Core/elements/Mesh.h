@@ -7,7 +7,7 @@
 
 using namespace render;
 
-enum class DrawType { TRIANGLES, LINES };
+enum class DrawType { TRIANGLES, LINES, LINE_STRIP };
 class Mesh {
 public:
   std::vector<Vertex> vertices;

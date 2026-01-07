@@ -19,7 +19,7 @@ Grid::Grid(glm::vec2 size, glm::vec3 position, float squareSize)
       vertex.normal = {.0f, 1.f, .0f};
 
       vertex.texCoords = glm::vec2(0.0f, 0.0f);
-      vertex.color = color;
+      vertex.color = glm::vec4(color, 1);
 
       vertices.push_back(vertex);
     }
@@ -50,7 +50,7 @@ void Grid::draw(Shader *shader) {
   model = glm::translate(model, position);
 
   shader->setMat4("model", model);
-  shader->setVec4("modelColor", color);
+  shader->setVec4("modelColor", glm::vec4(color, 1));
 
   mesh->draw(*shader, DrawType::LINES);
 }

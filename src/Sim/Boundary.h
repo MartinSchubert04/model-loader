@@ -1,3 +1,4 @@
+#pragma once
 
 #include "elements/Shader.h"
 #include "elements/Vertex.h"

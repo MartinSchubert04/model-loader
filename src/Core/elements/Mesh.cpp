@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Shader.h"
+#include "common.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
            std::vector<std::shared_ptr<Texture>> textures)
@@ -65,6 +66,9 @@ void Mesh::draw(Shader &shader, DrawType type) {
     break;
   case DrawType::LINES:
     GLcall(glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, 0));
+    break;
+  case DrawType::LINE_STRIP:
+    GLcall(glDrawArrays(GL_LINE_STRIP, 0, vertices.size()));
     break;
   default:
     GLcall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));

@@ -1,3 +1,4 @@
+#pragma once
 
 #include "common.h"
 #include "elements/Shader.h"
@@ -9,7 +10,7 @@ public:
   glm::vec2 size;
   glm::vec3 position;
   glm::vec3 squareSize;
-  glm::vec4 color = glm::vec4(.8f, .8f, .8f, .1f);
+  glm::vec3 color = GRID_COLOR;
 
   Grid(glm::vec2 size, glm::vec3 position = {0, 0, 0}, float squareSize = 2);
 

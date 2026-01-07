@@ -8,7 +8,7 @@
 
 class Camera {
 public:
-  float speed = 10.0f;
+  float speed = 70.0f;
 
   Camera(const glm::vec3 &position, float fov, float aspect, float near,
          float far) {

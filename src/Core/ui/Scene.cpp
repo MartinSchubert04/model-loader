@@ -2,6 +2,7 @@
 #include "common.h"
 #include "elements/Input.h"
 #include "imgui/imgui.h"
+#include <memory>
 
 namespace UI {
 
@@ -43,7 +44,7 @@ void Scene::render(float delta) {
     mModel->draw(*mShader.get());
   }
 
-  glm::vec3 gravity = {0.f, -9.81f, 0.f};
+  glm::vec3 gravity = {0.f, 0, 0.f};
 
   for (auto &contBound : mContainerBoudaries) {
     contBound->draw(mShader.get());

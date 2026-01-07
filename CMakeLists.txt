@@ -53,6 +53,12 @@ set(IMGUI_SOURCES
     include/imgui/imgui_widgets.cpp
     include/imgui/imgui_impl_glfw.cpp
     include/imgui/imgui_impl_opengl3.cpp
+
+    include/imguizmo/GraphEditor.cpp
+    include/imguizmo/ImCurveEdit.cpp
+    include/imguizmo/ImGradient.cpp
+    include/imguizmo/ImGuizmo.cpp
+    include/imguizmo/ImSequencer.cpp
 )
 
 set(SOURCES
@@ -98,6 +104,7 @@ add_executable(${APP}
 # ===============================
 target_include_directories(${APP} PRIVATE
     include
+    include/imgui
     src
     src/Core/
     src/Sim/
