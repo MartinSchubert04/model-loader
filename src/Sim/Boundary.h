@@ -1,8 +1,8 @@
 #pragma once
 
-#include "elements/Shader.h"
-#include "elements/Vertex.h"
-#include "elements/Mesh.h"
+#include "Core/Shader.h"
+#include "Core/Vertex.h"
+#include "Core/Mesh.h"
 
 enum class BoundaryType { SPHERE, CUBE, RECTANGLE };
 

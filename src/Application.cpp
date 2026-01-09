@@ -1,6 +1,6 @@
 #include "Application.h"
-#include "common.h"
-#include "elements/Log.h"
+#include "pch.h"
+#include "Core/Log.h"
 namespace Core {
 
 Application::Application(const std::string &app_name) {

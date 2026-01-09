@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common.h"
-#include "elements/Shader.h"
+#include "pch.h"
+#include "Core/Shader.h"
 #include "Object.h"
 
 class Grid : Object {

@@ -1,16 +1,10 @@
 #include "Planet.h"
-#include "common.h"
+#include "pch.h"
 #include "glm/fwd.hpp"
 #include <vector>
 
 Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :
-    radius(radius),
-    segments(segments),
-    position(pos),
-    scaleFactor(1),
-    speed(0.0f),
-    acceleration(0.0f),
-    mass(mass) {
+    radius(radius), segments(segments), position(pos), scaleFactor(1), speed(0.0f), acceleration(0.0f), mass(mass) {
 
   float PI = 3.14159265359f;
   this->color = glm::vec4(.8, .8, .8, .8);
@@ -54,8 +48,7 @@ Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :
     }
   }
 
-  mesh = std::make_unique<Mesh>(vertices, indices,
-                                std::vector<std::shared_ptr<Texture>>{});
+  mesh = std::make_unique<Mesh>(vertices, indices, std::vector<std::shared_ptr<Texture>>{});
 }
 
 void Planet::draw(Shader *shader) {

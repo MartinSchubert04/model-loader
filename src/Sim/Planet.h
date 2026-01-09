@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-#include "elements/Mesh.h"
+#include "Core/Mesh.h"
 
 class Planet : public Object {
 public:

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.h"
-#include "elements/Vertex.h"
-#include "elements/Mesh.h"
+#include "pch.h"
+#include "Core/Vertex.h"
+#include "Core/Mesh.h"
 
 class Object {
 

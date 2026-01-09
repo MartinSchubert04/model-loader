@@ -64,24 +64,24 @@ set(IMGUI_SOURCES
 set(SOURCES
     src/glad.c
     src/Application.cpp
-    src/Core/window/GLwindow.cpp
+    src/Engine/window/GLwindow.cpp
 
-    src/Core/renderer/GLrenderer.cpp
-    src/Core/renderer/UIcontext.cpp
-    src/Core/renderer/Buffers/VertexBuffer.cpp
-    src/Core/renderer/Buffers/FrameBuffer.cpp
-    src/Core/renderer/Buffers/VertexArray.cpp
-    src/Core/renderer/Buffers/IndexBuffer.cpp
+    src/Engine/renderer/GLrenderer.cpp
+    src/Engine/renderer/UIcontext.cpp
+    src/Engine/renderer/Buffers/VertexBuffer.cpp
+    src/Engine/renderer/Buffers/FrameBuffer.cpp
+    src/Engine/renderer/Buffers/VertexArray.cpp
+    src/Engine/renderer/Buffers/IndexBuffer.cpp
 
-    src/Core/elements/CameraFPS.cpp
-    src/Core/elements/Mesh.cpp
-    src/Core/elements/Model.cpp
-    src/Core/elements/Shader.cpp
-    src/Core/elements/Texture.cpp
-    src/Core/elements/Log.cpp
+    src/Engine/Core/CameraFPS.cpp
+    src/Engine/Core/Mesh.cpp
+    src/Engine/Core/Model.cpp
+    src/Engine/Core/Shader.cpp
+    src/Engine/Core/Texture.cpp
+    src/Engine/Core/Log.cpp
     
-    src/Core/ui/Scene.cpp
-    src/Core/ui/Panel.cpp
+    src/Engine/ui/Scene.cpp
+    src/Engine/ui/Panel.cpp
 
     src/Sim/Planet.cpp
     src/Sim/System.cpp
@@ -107,9 +107,9 @@ target_include_directories(${APP} PRIVATE
     include
     include/imgui
     src
-    src/Core/
+    src/Engine/
     src/Sim/
-    src/Core/renderer
+    src/Engine/renderer
 )
 
 # ===============================

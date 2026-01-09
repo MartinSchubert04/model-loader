@@ -44,7 +44,7 @@ REM Ejecutar y limpiar (Release)
 REM ================================
 if "%BUILD_TYPE%"=="Release" (
     if exist openGL.exe (
-        echo [BUILD INFO] Executing  .exe...
+        echo [BUILD INFO] Executing...
         .\openGL.exe
         del /f openGL.exe
         echo [BUILD SUCCESS] Executable removed.
