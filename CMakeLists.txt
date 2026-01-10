@@ -43,52 +43,52 @@ endif()
 # Sources
 # ===============================
 set(SOURCE_FILE
-    src/main.cpp
+    Engine/src/main.cpp
 )
 
 set(IMGUI_SOURCES
-    include/imgui/imgui.cpp
-    include/imgui/imgui_draw.cpp
-    include/imgui/imgui_tables.cpp
-    include/imgui/imgui_widgets.cpp
-    include/imgui/imgui_impl_glfw.cpp
-    include/imgui/imgui_impl_opengl3.cpp
+    Engine/include/imgui/imgui.cpp
+    Engine/include/imgui/imgui_draw.cpp
+    Engine/include/imgui/imgui_tables.cpp
+    Engine/include/imgui/imgui_widgets.cpp
+    Engine/include/imgui/imgui_impl_glfw.cpp
+    Engine/include/imgui/imgui_impl_opengl3.cpp
 
-    include/imguizmo/GraphEditor.cpp
-    include/imguizmo/ImCurveEdit.cpp
-    include/imguizmo/ImGradient.cpp
-    include/imguizmo/ImGuizmo.cpp
-    include/imguizmo/ImSequencer.cpp
+    Engine/include/imguizmo/GraphEditor.cpp
+    Engine/include/imguizmo/ImCurveEdit.cpp
+    Engine/include/imguizmo/ImGradient.cpp
+    Engine/include/imguizmo/ImGuizmo.cpp
+    Engine/include/imguizmo/ImSequencer.cpp
 )
 
 set(SOURCES
-    src/glad.c
-    src/Application.cpp
-    src/Engine/window/GLwindow.cpp
+    Engine/include/glad/glad.c
+    Engine/src/Application.cpp
+    Engine/src/Engine/window/GLwindow.cpp
 
-    src/Engine/renderer/GLrenderer.cpp
-    src/Engine/renderer/UIcontext.cpp
-    src/Engine/renderer/Buffers/VertexBuffer.cpp
-    src/Engine/renderer/Buffers/FrameBuffer.cpp
-    src/Engine/renderer/Buffers/VertexArray.cpp
-    src/Engine/renderer/Buffers/IndexBuffer.cpp
+    Engine/src/Engine/Renderer/GLrenderer.cpp
+    Engine/src/Engine/Renderer/UIcontext.cpp
+    Engine/src/Engine/Renderer/VertexBuffer.cpp
+    Engine/src/Engine/Renderer/FrameBuffer.cpp
+    Engine/src/Engine/Renderer/VertexArray.cpp
+    Engine/src/Engine/Renderer/IndexBuffer.cpp
 
-    src/Engine/Core/CameraFPS.cpp
-    src/Engine/Core/Mesh.cpp
-    src/Engine/Core/Model.cpp
-    src/Engine/Core/Shader.cpp
-    src/Engine/Core/Texture.cpp
-    src/Engine/Core/Log.cpp
+    Engine/src/Engine/Core/CameraFPS.cpp
+    Engine/src/Engine/Core/Mesh.cpp
+    Engine/src/Engine/Core/Model.cpp
+    Engine/src/Engine/Core/Shader.cpp
+    Engine/src/Engine/Core/Texture.cpp
+    Engine/src/Engine/Core/Log.cpp
     
-    src/Engine/ui/Scene.cpp
-    src/Engine/ui/Panel.cpp
+    Engine/src/Engine/ui/Scene.cpp
+    Engine/src/Engine/ui/Panel.cpp
 
-    src/Sim/Planet.cpp
-    src/Sim/System.cpp
-    src/Sim/Solver.cpp
-    src/Sim/Grid.cpp
+    Sim/src/Planet.cpp
+    Sim/src/System.cpp
+    Sim/src/Solver.cpp
+    Sim/src/Grid.cpp
 
-    include/stb/stb_image.cpp
+    Engine/include/stb/stb_image.cpp
     ${IMGUI_SOURCES}
 )
 
@@ -104,12 +104,12 @@ add_executable(${APP}
 # Includes (TARGET-BASED)
 # ===============================
 target_include_directories(${APP} PRIVATE
-    include
-    include/imgui
-    src
-    src/Engine/
-    src/Sim/
-    src/Engine/renderer
+    ${PROJECT_SOURCE_DIR}
+    Engine/include
+    Engine/include/imgui
+    Engine/src
+    Engine/src/Engine/
+    Sim/Assets/
 )
 
 # ===============================
@@ -128,7 +128,7 @@ if(WIN32)
     target_link_libraries(${APP} PRIVATE
         OpenGL::GL
         glfw
-        "${CMAKE_SOURCE_DIR}/lib/assimp/libassimp.a"
+        "${CMAKE_SOURCE_DIR}/Engine/lib/assimp/libassimp.a"
         z  # <---(dependencia de Assimp)
     )
 
