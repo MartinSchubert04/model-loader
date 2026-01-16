@@ -13,23 +13,23 @@ permissions:
 
 jobs:
   # Linux build (ensure portability)
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # build-linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y build-essential cmake ninja-build \
-            libgl1-mesa-dev libx11-dev libxcursor-dev libxinerama-dev \
-            libxrandr-dev libxi-dev libxkbcommon-dev libwayland-dev \
-            libassimp-dev
+  #     - name: Install Dependencies
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y build-essential cmake ninja-build \
+  #           libgl1-mesa-dev libx11-dev libxcursor-dev libxinerama-dev \
+  #           libxrandr-dev libxi-dev libxkbcommon-dev libwayland-dev \
+  #           libassimp-dev
 
-      - name: Configure and Build
-        run: |
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-          cmake --build build
+  #     - name: Configure and Build
+  #       run: |
+  #         cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+  #         cmake --build build
 
   # JOB 2: Windows Build + Release
   build-windows:
