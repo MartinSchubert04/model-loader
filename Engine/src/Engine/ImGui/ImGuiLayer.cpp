@@ -1,9 +1,15 @@
 #include "ImGuiLayer.h"
 #include "Core/Application.h"
+#include "Core/Base.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/Event.h"
+#include "Events/KeyEVent.h"
+#include "Events/MouseEVent.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
+#include "pch.h"
 
 namespace Engine {
 
@@ -28,8 +34,8 @@ void ImGuiLayer::onAttach() {
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
   float fontSize = 18.0f;  // *2.0f;
-  // io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
-  // io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans/OpenSans-Regular.ttf", fontSize);
+  io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
+  io.FontDefault = io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Regular.ttf", fontSize);
 
   Application &app = Application::get();
 
@@ -75,6 +81,13 @@ void ImGuiLayer::onUpdate() {
   }
 }
 
-void ImGuiLayer::onEvent(Event &event) {}
+void ImGuiLayer::onEvent(Event &event) {
+
+  if (mBlockEvents) {
+    ImGuiIO &io = ImGui::GetIO();
+    event.handled = event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
+    event.handled = event.isInCategory(EventCategoryKeyboard) && io.WantCaptureMouse;
+  }
+}
 
 }  // namespace Engine

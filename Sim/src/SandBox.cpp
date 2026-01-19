@@ -1,9 +1,10 @@
+#include "Core/Log.h"
 #include "Engine.h"
 
 class SandBox : public Engine::Application {
 
 public:
-  SandBox() { pushLayer(new Engine::ImGuiLayer); }
+  SandBox() { pushOverlay(new Engine::ImGuiLayer); }
   ~SandBox() {}
 };
 

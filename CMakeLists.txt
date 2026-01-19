@@ -83,6 +83,7 @@ set(SOURCES
     Engine/src/Engine/ui/Panel.cpp
     
     Engine/src/Platform/Windows/WindowsWindow.cpp
+    Engine/src/Platform/Windows/WindowsInput.cpp
 
     Sim/src/Planet.cpp
     Sim/src/System.cpp
