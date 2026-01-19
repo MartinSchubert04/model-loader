@@ -9,7 +9,6 @@
 #include "Core/Log.h"
 #include "Core/Input.h"
 #include "Editor/src/EditorLayer.h"
-
 namespace Engine {
 
 Application *Application::s_instance = nullptr;
@@ -65,8 +64,6 @@ void Application::onEvent(Event &e) {
 
   if (e.getEventType() != EventType::MouseMoved)
     CORE_TRACE("{0}", e.toString());
-
-  CORE_TRACE("x: {0}, y: {1}", Input::getMousePos().x, Input::getMousePos().y);
 
   for (auto it = mLayerStack.end(); it != mLayerStack.begin();) {
     (*--it)->onEvent(e);
