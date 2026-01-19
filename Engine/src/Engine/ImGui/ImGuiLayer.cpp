@@ -60,20 +60,43 @@ void ImGuiLayer::onDetach() {
   ImGui::DestroyContext();
 }
 
-void ImGuiLayer::onUpdate() {
+void ImGuiLayer::onEvent(Event &event) {
 
+  if (mBlockEvents) {
+    ImGuiIO &io = ImGui::GetIO();
+    event.handled |= event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
+    event.handled |= event.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
+  }
+}
+
+void ImGuiLayer::begin() {
+  ImGui_ImplOpenGL3_NewFrame();  // render
+  ImGui_ImplGlfw_NewFrame();  // plataforma
+  ImGui::NewFrame();  // gen new frame
+}
+
+void ImGuiLayer::end() {
   ImGuiIO &io = ImGui::GetIO();
 
   Window &window = Application::get().getWindow();
   io.DisplaySize = ImVec2(window.getWidth(), window.getHeight());
 
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    GLFWwindow *backup_current_context = glfwGetCurrentContext();
+    ImGui::UpdatePlatformWindows();
+    ImGui::RenderPlatformWindowsDefault();
+    glfwMakeContextCurrent(backup_current_context);
+  }
+}
+
+void ImGuiLayer::onImGuiRender() {
+  ImGuiIO &io = ImGui::GetIO();
   float time = (float)glfwGetTime();
   io.DeltaTime = mTime > 0 ? (time - mTime) : (1.0f / 60.0f);
   mTime = time;
-
-  ImGui_ImplOpenGL3_NewFrame();  // render
-  ImGui_ImplGlfw_NewFrame();  // plataforma
-  ImGui::NewFrame();  // gen new frame
 
   // Create the docking environment
   ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
@@ -97,29 +120,11 @@ void ImGuiLayer::onUpdate() {
   ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
   ImGui::End();
+  // end of Root docking env, all ImGui widget must go under this code
 
-  bool show_demo_window = true;
+  bool show = true;
 
-  ImGui::ShowDemoWindow(&show_demo_window);
-
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    GLFWwindow *backup_current_context = glfwGetCurrentContext();
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(backup_current_context);
-  }
-}
-
-void ImGuiLayer::onEvent(Event &event) {
-
-  if (mBlockEvents) {
-    ImGuiIO &io = ImGui::GetIO();
-    event.handled |= event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
-    event.handled |= event.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
-  }
+  ImGui::ShowDemoWindow(&show);
 }
 
 }  // namespace Engine

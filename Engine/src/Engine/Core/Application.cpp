@@ -8,6 +8,7 @@
 #include "Core/Base.h"
 #include "Core/Log.h"
 #include "Core/Input.h"
+#include "Editor/src/EditorLayer.h"
 
 namespace Engine {
 
@@ -20,6 +21,9 @@ Application::Application() {
 
   mWindow = Scope<Window>(Window::create());
   mWindow->setEventCallback(BIND_FN(Application ::onEvent));
+
+  mImGuiLayer = new ImGuiLayer;
+  pushOverlay(mImGuiLayer);
 }
 
 Application::~Application() {}
@@ -33,6 +37,11 @@ void Application::run() {
 
     for (Layer *layer : mLayerStack)
       layer->onUpdate();
+
+    mImGuiLayer->begin();
+    for (Layer *layer : mLayerStack)
+      layer->onImGuiRender();
+    mImGuiLayer->end();
 
     mWindow->onUpdate();
   }

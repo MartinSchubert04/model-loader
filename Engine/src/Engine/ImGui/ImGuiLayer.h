@@ -1,5 +1,4 @@
 #pragma once
-#include "Core/Application.h"
 #include "pch.h"
 #include "Core/Layer.h"
 #include "Events/Event.h"
@@ -17,8 +16,11 @@ public:
 
   void onAttach() override;
   void onDetach() override;
-  void onUpdate() override;
+  void onImGuiRender() override;
   void onEvent(Event &event) override;
+
+  void begin();
+  void end();
 
 private:
   bool onMouseButtonPressedEvent(MouseButtonPressedEvent &e);

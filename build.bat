@@ -36,7 +36,7 @@ REM Configurar y compilar
 REM ================================
 echo [BUILD INFO] Configuring and Building (%BUILD_TYPE%)...
 
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=%BUILD_TYPE% || exit /b 1
+cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=%BUILD_TYPE% || exit /b 1
 cmake --build build || exit /b 1
 
 REM ================================

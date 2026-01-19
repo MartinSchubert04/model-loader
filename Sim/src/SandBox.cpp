@@ -4,7 +4,7 @@
 class SandBox : public Engine::Application {
 
 public:
-  SandBox() { pushOverlay(new Engine::ImGuiLayer); }
+  SandBox() {}
   ~SandBox() {}
 };
 

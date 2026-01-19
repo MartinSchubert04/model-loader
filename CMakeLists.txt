@@ -109,9 +109,8 @@ target_include_directories(${APP} PRIVATE
     ${PROJECT_SOURCE_DIR}
     Engine/include/
     Engine/include/imgui
-    Engine/src/
+    Engine/src
     Engine/src/Engine/
-    Engine/src/Editor/
     Sim/Assets/
 )
 

@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Core/LayerStack.h"
+#include "Engine/ImGui/ImGuiLayer.h"
 
 namespace Engine {
 
@@ -31,6 +32,7 @@ private:
 private:
   Scope<Window> mWindow;  // only this class owns it
   bool mRunning = true;
+  ImGuiLayer *mImGuiLayer;
 
   LayerStack mLayerStack;
 
