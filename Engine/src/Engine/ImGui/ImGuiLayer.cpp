@@ -37,12 +37,20 @@ void ImGuiLayer::onAttach() {
   io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
   io.FontDefault = io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Regular.ttf", fontSize);
 
+  ImGuiStyle &style = ImGui::GetStyle();
+
+  // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    style.WindowRounding = 0.0f;
+    style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+  }
+
   Application &app = Application::get();
 
   GLFWwindow *window = static_cast<GLFWwindow *>(app.getWindow().getNativeWindow());
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 460");
+  ImGui_ImplOpenGL3_Init("#version 460 core");
 }
 
 void ImGuiLayer::onDetach() {
@@ -67,8 +75,32 @@ void ImGuiLayer::onUpdate() {
   ImGui_ImplGlfw_NewFrame();  // plataforma
   ImGui::NewFrame();  // gen new frame
 
-  static bool show = true;
-  ImGui::ShowDemoWindow(&show);
+  // Create the docking environment
+  ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                                 ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+                                 ImGuiWindowFlags_NoBackground;
+
+  ImGuiViewport *viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->Pos);
+  ImGui::SetNextWindowSize(viewport->Size);
+  ImGui::SetNextWindowViewport(viewport->ID);
+
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+  ImGui::Begin("InvisibleWindow", nullptr, windowFlags);
+  ImGui::PopStyleVar(3);
+
+  ImGuiID dockSpaceId = ImGui::GetID("InvisibleWindowDockSpace");
+
+  ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+  ImGui::End();
+
+  bool show_demo_window = true;
+
+  ImGui::ShowDemoWindow(&show_demo_window);
 
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -85,8 +117,8 @@ void ImGuiLayer::onEvent(Event &event) {
 
   if (mBlockEvents) {
     ImGuiIO &io = ImGui::GetIO();
-    event.handled = event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
-    event.handled = event.isInCategory(EventCategoryKeyboard) && io.WantCaptureMouse;
+    event.handled |= event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
+    event.handled |= event.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
   }
 }
 
