@@ -1,13 +1,12 @@
 #include "WindowsWindow.h"
 #include "Core/Assert.h"
 #include "Core/Window.h"
-#include "GLFW/glfw3.h"
 #include "pch.h"
 #include "Events/Event.h"
 #include "Events/KeyEvent.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/MouseEvent.h"
-
+#include "Platform/OpenGL/OpenGLcontext.h"
 namespace Engine {
 
 static uint8_t s_GLFWWindowCOunt = 0;
@@ -25,6 +24,10 @@ WindowsWindow::~WindowsWindow() {
 }
 
 void WindowsWindow::init(const WindowProps &props) {
+
+  mData.title = props._title;
+  mData.height = props._height;
+  mData.width = props._width;
 
   if (s_GLFWWindowCOunt == 0) {
     int success = glfwInit();
@@ -44,14 +47,11 @@ void WindowsWindow::init(const WindowProps &props) {
     CORE_ASSERT(mWindow, "Failed to create window context");
   }
 
-  glfwMakeContextCurrent(mWindow);
-  glfwSetWindowUserPointer(mWindow, &mData);
-  glfwSetErrorCallback(GLFWErrorCallback);
+  mContext = createScope<OpenGLcontext>(mWindow);
+  mContext->init();
 
-  {
-    int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    CORE_ASSERT(success, "Failed to load GLAD context");
-  }
+  glfwSetWindowUserPointer(mWindow, &mData);
+
   setVSync(true);
 
   glfwSetWindowSizeCallback(mWindow, [](GLFWwindow *window, int width, int height) {
@@ -129,7 +129,7 @@ void WindowsWindow::shutdown() {
 
 void WindowsWindow::onUpdate() {
   glfwPollEvents();
-  glfwSwapBuffers(mWindow);
+  mContext->swapBuffers();
 }
 
 void WindowsWindow::setVSync(const bool enable) {

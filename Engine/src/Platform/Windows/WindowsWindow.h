@@ -1,5 +1,6 @@
 #include "Core/Window.h"
 #include "pch.h"
+#include "Renderer/GraphicsContext.h"
 
 namespace Engine {
 
@@ -27,6 +28,8 @@ private:
 
 private:
   GLFWwindow *mWindow;
+  // GraphicsContext *mContext;
+  Scope<GraphicsContext> mContext;
 
   struct WindowData {
     std::string title;

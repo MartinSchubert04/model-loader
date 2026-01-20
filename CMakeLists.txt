@@ -82,6 +82,7 @@ set(SOURCES
     Engine/src/Engine/ui/Scene.cpp
     Engine/src/Engine/ui/Panel.cpp
     
+    Engine/src/Platform/OpenGL/OpenGLcontext.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/Platform/Windows/WindowsInput.cpp
 
