@@ -5,6 +5,7 @@
 #include "Events/MouseEVent.h"
 #include "Events/KeyEVent.h"
 #include "Events/ApplicationEvent.h"
+
 namespace Engine {
 
 class ImGuiLayer : public Layer {
@@ -18,6 +19,8 @@ public:
   void onDetach() override;
   void onImGuiRender() override;
   void onEvent(Event &event) override;
+
+  void blockEvents(bool block) { mBlockEvents = block; }
 
   void begin();
   void end();

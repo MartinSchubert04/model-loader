@@ -29,6 +29,14 @@ Application::~Application() {}
 
 void Application::run() {
   CORE_INFO("App running");
+  const GLubyte *versionGL = glGetString(GL_VERSION);  // Get the version string
+  const GLubyte *vendor = glGetString(GL_VENDOR);
+  const GLubyte *renderer = glGetString(GL_RENDERER);
+  const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+  CORE_INFO("OpenGL version: {0}, vendor: {1}, renderer: {2}, glslVersion: {3}", (const char *)versionGL,
+            (const char *)vendor, (const char *)renderer, (const char *)glslVersion);
+  CORE_INFO("GLFW version: {0}", glfwGetVersionString());
 
   while (mRunning) {
     glClearColor(.2, .2, .2, 1);
