@@ -1,14 +1,12 @@
 #include "ImGuiLayer.h"
 #include "Core/Application.h"
 #include "Core/Base.h"
+#include "Core/Log.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/Event.h"
 #include "Events/KeyEVent.h"
 #include "Events/MouseEVent.h"
-#include "GLFW/glfw3.h"
 #include "imgui.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_internal.h"
 #include "pch.h"
 
 namespace Engine {
@@ -24,14 +22,16 @@ void ImGuiLayer::onAttach() {
   // ImGui::StyleColorsClassic();
 
   ImGuiIO &io = ImGui::GetIO();
-  io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-  io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+  (void)io;
+
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
   io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+  // viewports set up
+  // io.ConfigFlags |= ImGuiViewportFlags_NoTaskBarIcon;
+  // io.ConfigFlags |= ImGuiViewportFlags_NoAutoMerge;
 
   float fontSize = 18.0f;  // *2.0f;
   io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
@@ -60,16 +60,21 @@ void ImGuiLayer::onDetach() {
   ImGui::DestroyContext();
 }
 
-void ImGuiLayer::onEvent(Event &event) {
+void ImGuiLayer::onEvent(Event &e) {
 
   if (mBlockEvents) {
     ImGuiIO &io = ImGui::GetIO();
-    event.handled |= event.isInCategory(EventCategoryMouseButton) && io.WantCaptureMouse;
-    event.handled |= event.isInCategory(EventCategoryKeyboard) && io.WantCaptureKeyboard;
+    e.handled |= e.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+    e.handled |= e.isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
   }
 }
 
 void ImGuiLayer::begin() {
+  ImGuiIO &io = ImGui::GetIO();
+  float time = (float)glfwGetTime();
+  io.DeltaTime = mTime > 0 ? (time - mTime) : (1.0f / 60.0f);
+  mTime = time;
+
   ImGui_ImplOpenGL3_NewFrame();  // render
   ImGui_ImplGlfw_NewFrame();  // plataforma
   ImGui::NewFrame();  // gen new frame
@@ -94,9 +99,6 @@ void ImGuiLayer::end() {
 
 void ImGuiLayer::onImGuiRender() {
   ImGuiIO &io = ImGui::GetIO();
-  float time = (float)glfwGetTime();
-  io.DeltaTime = mTime > 0 ? (time - mTime) : (1.0f / 60.0f);
-  mTime = time;
 
   // Create the docking environment
   ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
@@ -123,6 +125,9 @@ void ImGuiLayer::onImGuiRender() {
   // end of Root docking env, all ImGui widget must go under this code
 
   bool show = true;
+
+  ImGui::Begin("hola");
+  ImGui::End();
 
   ImGui::ShowDemoWindow(&show);
 }

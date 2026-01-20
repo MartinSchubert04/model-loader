@@ -1,14 +1,14 @@
 #include "pch.h"
 
-#include <misc/cpp/imgui_stdlib.cpp>
+#define IMGUI_HAS_VIEWPORT
 
 #include "imgui/imgui.cpp"
 #include "imgui_demo.cpp"
 #include "imgui/imgui_draw.cpp"
 #include "imgui/imgui_tables.cpp"
 #include "imgui/imgui_widgets.cpp"
-#include "imgui/imgui_impl_glfw.cpp"
-#include "imgui/imgui_impl_opengl3.cpp"
+#include "imgui/backends/imgui_impl_glfw.cpp"
+#include "imgui/backends/imgui_impl_opengl3.cpp"
 
 #include "imguizmo/GraphEditor.cpp"
 #include "imguizmo/ImCurveEdit.cpp"
