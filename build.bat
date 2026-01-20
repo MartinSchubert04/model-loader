@@ -36,8 +36,9 @@ REM Configurar y compilar
 REM ================================
 echo [BUILD INFO] Configuring and Building (%BUILD_TYPE%)...
 
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=%BUILD_TYPE% || exit /b 1
-cmake --build build || exit /b 1
+cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=%BUILD_TYPE% || exit /b 1
+REM Solo se asignan 4 threads para compilar (~2GB de ram por thread)
+cmake --build build -j 4 || exit /b 1 
 
 REM ================================
 REM Ejecutar y limpiar (Release)

@@ -1,9 +1,13 @@
 #include "ImGuiLayer.h"
 #include "Core/Application.h"
-#include "GLFW/glfw3.h"
+#include "Core/Base.h"
+#include "Core/Log.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/Event.h"
+#include "Events/KeyEVent.h"
+#include "Events/MouseEVent.h"
 #include "imgui.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_internal.h"
+#include "pch.h"
 
 namespace Engine {
 
@@ -18,25 +22,35 @@ void ImGuiLayer::onAttach() {
   // ImGui::StyleColorsClassic();
 
   ImGuiIO &io = ImGui::GetIO();
-  io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-  io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+  (void)io;
+
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
   io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+
+  // viewports set up
+  // io.ConfigFlags |= ImGuiViewportFlags_NoTaskBarIcon;
+  // io.ConfigFlags |= ImGuiViewportFlags_NoAutoMerge;
 
   float fontSize = 18.0f;  // *2.0f;
-  // io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
-  // io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans/OpenSans-Regular.ttf", fontSize);
+  io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Bold.ttf", fontSize);
+  io.FontDefault = io.Fonts->AddFontFromFileTTF("Editor/Assets/Fonts/OpenSans/OpenSans-Regular.ttf", fontSize);
+
+  ImGuiStyle &style = ImGui::GetStyle();
+
+  // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    style.WindowRounding = 0.0f;
+    style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+  }
 
   Application &app = Application::get();
 
   GLFWwindow *window = static_cast<GLFWwindow *>(app.getWindow().getNativeWindow());
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 460");
+  ImGui_ImplOpenGL3_Init("#version 460 core");
 }
 
 void ImGuiLayer::onDetach() {
@@ -46,13 +60,17 @@ void ImGuiLayer::onDetach() {
   ImGui::DestroyContext();
 }
 
-void ImGuiLayer::onUpdate() {
+void ImGuiLayer::onEvent(Event &e) {
 
+  if (mBlockEvents) {
+    ImGuiIO &io = ImGui::GetIO();
+    e.handled |= e.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+    e.handled |= e.isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+  }
+}
+
+void ImGuiLayer::begin() {
   ImGuiIO &io = ImGui::GetIO();
-
-  Window &window = Application::get().getWindow();
-  io.DisplaySize = ImVec2(window.getWidth(), window.getHeight());
-
   float time = (float)glfwGetTime();
   io.DeltaTime = mTime > 0 ? (time - mTime) : (1.0f / 60.0f);
   mTime = time;
@@ -60,9 +78,13 @@ void ImGuiLayer::onUpdate() {
   ImGui_ImplOpenGL3_NewFrame();  // render
   ImGui_ImplGlfw_NewFrame();  // plataforma
   ImGui::NewFrame();  // gen new frame
+}
 
-  static bool show = true;
-  ImGui::ShowDemoWindow(&show);
+void ImGuiLayer::end() {
+  ImGuiIO &io = ImGui::GetIO();
+
+  Window &window = Application::get().getWindow();
+  io.DisplaySize = ImVec2(window.getWidth(), window.getHeight());
 
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -75,6 +97,39 @@ void ImGuiLayer::onUpdate() {
   }
 }
 
-void ImGuiLayer::onEvent(Event &event) {}
+void ImGuiLayer::onImGuiRender() {
+  ImGuiIO &io = ImGui::GetIO();
+
+  // Create the docking environment
+  ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+                                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                                 ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+                                 ImGuiWindowFlags_NoBackground;
+
+  ImGuiViewport *viewport = ImGui::GetMainViewport();
+  ImGui::SetNextWindowPos(viewport->Pos);
+  ImGui::SetNextWindowSize(viewport->Size);
+  ImGui::SetNextWindowViewport(viewport->ID);
+
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+  ImGui::Begin("InvisibleWindow", nullptr, windowFlags);
+  ImGui::PopStyleVar(3);
+
+  ImGuiID dockSpaceId = ImGui::GetID("InvisibleWindowDockSpace");
+
+  ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+  ImGui::End();
+  // end of Root docking env, all ImGui widget must go under this code
+
+  bool show = true;
+
+  ImGui::Begin("hola");
+  ImGui::End();
+
+  ImGui::ShowDemoWindow(&show);
+}
 
 }  // namespace Engine

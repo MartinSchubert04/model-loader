@@ -5,6 +5,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Core/LayerStack.h"
+#include "Engine/ImGui/ImGuiLayer.h"
 
 namespace Engine {
 
@@ -18,9 +19,6 @@ public:
   void run();
   void onEvent(Event &e);
 
-  bool onWindowClose(WindowCloseEvent &e);
-  bool onWindowResize(WindowResizeEvent &e);
-
   void pushLayer(Layer *layer);
   void pushOverlay(Layer *layer);
 
@@ -28,8 +26,13 @@ public:
   static Application &get() { return *s_instance; }
 
 private:
+  bool onWindowClose(WindowCloseEvent &e);
+  bool onWindowResize(WindowResizeEvent &e);
+
+private:
   Scope<Window> mWindow;  // only this class owns it
   bool mRunning = true;
+  ImGuiLayer *mImGuiLayer;
 
   LayerStack mLayerStack;
 

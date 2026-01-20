@@ -1,3 +1,4 @@
+#pragma once
 #include "Event.h"
 #include "MouseCodes.h"
 namespace Engine {
@@ -12,7 +13,7 @@ public:
 
   std::string toString() const override {
     std::stringstream ss;
-    ss << "MouseMovedEvent: " << getX() << ", " << getX();
+    ss << "MouseMovedEvent: " << getX() << ", " << getY();
     return ss.str();
   }
 

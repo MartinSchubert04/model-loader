@@ -1,3 +1,4 @@
+#pragma once
 #include "Event.h"
 
 namespace Engine {
@@ -7,8 +8,8 @@ class WindowResizeEvent : public Event {
 public:
   WindowResizeEvent(unsigned int width, unsigned int height) : mWidth(width), mHeight(height) {}
 
-  unsigned int GetWidth() const { return mWidth; }
-  unsigned int GetHeight() const { return mHeight; }
+  unsigned int getWidth() const { return mWidth; }
+  unsigned int getHeight() const { return mHeight; }
 
   std::string toString() const override {
     std::stringstream ss;

@@ -39,7 +39,7 @@ else()
     FetchContent_MakeAvailable(glfw)
 endif()
 
-add_compile_options(-fdiagnostics-color=always)
+add_compile_options(-fdiagnostics-color=always -w)
 
 
 # ===============================
@@ -83,6 +83,7 @@ set(SOURCES
     Engine/src/Engine/ui/Panel.cpp
     
     Engine/src/Platform/Windows/WindowsWindow.cpp
+    Engine/src/Platform/Windows/WindowsInput.cpp
 
     Sim/src/Planet.cpp
     Sim/src/System.cpp
@@ -108,9 +109,8 @@ target_include_directories(${APP} PRIVATE
     ${PROJECT_SOURCE_DIR}
     Engine/include/
     Engine/include/imgui
-    Engine/src/
+    Engine/src
     Engine/src/Engine/
-    Engine/src/Editor/
     Sim/Assets/
 )
 
@@ -120,6 +120,7 @@ target_include_directories(${APP} PRIVATE
 target_compile_definitions(${APP} PRIVATE
     IMGUI_IMPL_OPENGL_LOADER_GLAD
     ROOT_DIR="${CMAKE_SOURCE_DIR}/"
+    GLFW_EXPOSE_NATIVE_WIN32
     ASSIMP_STATIC_LIB
 )
 
@@ -157,6 +158,12 @@ endif()
 if(MINGW OR GNUCXX)
     # Quitamos -mwindows si existiera y forzamos -mconsole
     target_link_options(${APP} PRIVATE -mconsole)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # Fuerza el uso de la librería estándar de GNU que MSYS2 tiene bien instalada
+    add_link_options("-static-libstdc++")
+    add_link_options("-lstdc++")
 endif()
 
 # 2. Corregimos el Target de Ejecución y Limpieza
