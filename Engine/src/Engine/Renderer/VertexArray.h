@@ -1,10 +1,12 @@
 #pragma once
 
-#include "IndexBuffer.h"
+#include "Renderer/IndexBuffer.h"
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/VertexBufferLayout.h"
+#include "Renderer/Buffer.h"
 
-namespace render {
+namespace Engine {
+
 class VertexArray {
 private:
   unsigned int mVAO;
@@ -19,4 +21,4 @@ public:
   void destroy();
 };
 
-}  // namespace render
+}  // namespace Engine

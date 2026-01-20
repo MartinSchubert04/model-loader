@@ -33,7 +33,6 @@ private:
   Scope<Window> mWindow;  // only this class owns it
   bool mRunning = true;
   ImGuiLayer *mImGuiLayer;
-
   LayerStack mLayerStack;
 
   static Application *s_instance;

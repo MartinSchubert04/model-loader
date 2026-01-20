@@ -2,7 +2,7 @@
 #include "Renderer/VertexBufferLayout.h"
 #include "pch.h"
 
-namespace render {
+namespace Engine {
 
 VertexArray::VertexArray() {
   GLcall(glGenVertexArrays(1, &mVAO));
@@ -36,4 +36,4 @@ void VertexArray::unbind() const {
 void VertexArray::destroy() {
   GLcall(glDeleteVertexArrays(1, &mVAO));
 }
-}  // namespace render
+}  // namespace Engine

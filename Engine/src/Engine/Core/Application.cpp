@@ -23,19 +23,19 @@ Application::Application() {
 
   mImGuiLayer = new ImGuiLayer;
   pushOverlay(mImGuiLayer);
+
+  std::vector<float> vertices = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5, 0.0f, 0.0f, 0.5f, 0.0f};
 }
 
 Application::~Application() {}
 
 void Application::run() {
   CORE_INFO("App running");
-  const GLubyte *versionGL = glGetString(GL_VERSION);  // Get the version string
-  const GLubyte *vendor = glGetString(GL_VENDOR);
-  const GLubyte *renderer = glGetString(GL_RENDERER);
-  const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-  CORE_INFO("OpenGL version: {0}, vendor: {1}, renderer: {2}, glslVersion: {3}", (const char *)versionGL,
-            (const char *)vendor, (const char *)renderer, (const char *)glslVersion);
+  CORE_INFO("OpenGL version: {0}", (const char *)glGetString(GL_VERSION));
+  CORE_INFO("Vendor: {0}", (const char *)glGetString(GL_VENDOR));
+  CORE_INFO("Renderer: {0}", (const char *)glGetString(GL_RENDERER));
+  CORE_INFO("GLSL verson: {0}", (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
   CORE_INFO("GLFW version: {0}", glfwGetVersionString());
 
   while (mRunning) {

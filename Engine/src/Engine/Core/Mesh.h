@@ -5,7 +5,7 @@
 #include "Renderer/VertexArray.h"
 #include "Texture.h"
 
-using namespace render;
+using namespace Engine;
 
 enum class DrawType { TRIANGLES, LINES, LINE_STRIP };
 class Mesh {

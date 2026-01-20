@@ -1,10 +1,8 @@
 #pragma once
+#include "Renderer/Buffer.h"
+namespace Engine {
 
-#include "renderer/Render.h"
-
-namespace render {
-
-class IndexBuffer : Buffer {
+class IndexBuffer : public Buffer {
 
 private:
   GLuint &mIBO = mRendererID;
@@ -18,4 +16,4 @@ public:
   void destroy() override;
 };
 
-};  // namespace render
+};  // namespace Engine
