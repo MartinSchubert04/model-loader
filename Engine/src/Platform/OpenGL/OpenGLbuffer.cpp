@@ -1,4 +1,5 @@
 #include "OpenGLbuffer.h"
+#include "Renderer/Buffer.h"
 #include "pch.h"
 #include <cstdint>
 

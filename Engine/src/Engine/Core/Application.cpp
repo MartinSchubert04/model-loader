@@ -4,14 +4,13 @@
 #include "Events/ApplicationEvent.h"
 #include "Events/Event.h"
 #include "Renderer/Buffer.h"
-#include "imgui.h"
+#include "Renderer/Types.h"
 #include "pch.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
 #include "Core/Input.h"
 #include "Editor/src/EditorLayer.h"
 #include "Core/Shader.h"
-#include <cstdint>
 namespace Engine {
 
 Application *Application::s_instance = nullptr;
@@ -31,14 +30,30 @@ Application::Application() {
   glBindVertexArray(mVAO);
 
   // std::vector<float> vertices = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5, 0.0f, 0.0f, 0.5f, 0.0f};
-  float vertices[3 * 3] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5, 0.0f, 0.0f, 0.5f, 0.0f};
-  unsigned int indices[3] = {0, 1, 2};
-
+  float vertices[7 * 3] = {
+      -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.5f, -0.5, 0.0f, 1.0f,
+      0.0f,  0.0f,  1.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+  };
   vb = VertexBuffer::create(vertices, sizeof(vertices));
+
+  BufferLayout layout = {
+      {Types::ShaderDataType::float3, "a_Pos"},
+      {Types::ShaderDataType::float4, "a_Color"},
+  };
+
+  vb->setLayout(layout);
+
+  unsigned int indices[3] = {0, 1, 2};
   ib = IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
 
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+  auto &vbLayout = vb->getLayout();
+  auto &elements = vbLayout.getElements();
+  for (unsigned int i{0}; i < elements.size(); i++) {
+    auto &e = elements[i];
+    glEnableVertexAttribArray(i);
+    glVertexAttribPointer(i, e.getElemenentCount(), e.getElementType(), e.normalized ? GL_TRUE : GL_FALSE,
+                          layout.getStride(), (const void *)e.offset);
+  }
 }
 
 Application::~Application() {}

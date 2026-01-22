@@ -1,65 +1,65 @@
 #pragma once
 
 #include "pch.h"
-"
-    namespace Engine {
 
-  struct VertexBufferElement {
-    unsigned int type;
-    unsigned int count;
-    const char normalized;
+namespace Engine {
 
-    static unsigned int getSizeOf(unsigned int type) {
-      switch (type) {
-      case GL_FLOAT:
-        return 4;
-      case GL_UNSIGNED_INT:
-        return 4;
-      case GL_UNSIGNED_BYTE:
-        return 1;
-      }
+struct VertexBufferElement {
+  unsigned int type;
+  unsigned int count;
+  const char normalized;
 
-      CORE_ASSERT(false);
-      return 0;
+  static unsigned int getSizeOf(unsigned int type) {
+    switch (type) {
+    case GL_FLOAT:
+      return 4;
+    case GL_UNSIGNED_INT:
+      return 4;
+    case GL_UNSIGNED_BYTE:
+      return 1;
     }
-  };
 
-  class VertexBufferLayout {
-  private:
-    std::vector<VertexBufferElement> mElements;
-    unsigned int mStride;
+    CORE_ASSERT(false);
+    return 0;
+  }
+};
 
-  public:
-    VertexBufferLayout() : mStride(0) {};
+class VertexBufferLayout {
+private:
+  std::vector<VertexBufferElement> mElements;
+  unsigned int mStride;
 
-    template <typename T>
-    void push(unsigned int count);
-
-    inline const std::vector<VertexBufferElement> &getElements() const { return mElements; };
-    inline const unsigned int getStride() const { return mStride; }
-  };
+public:
+  VertexBufferLayout() : mStride(0) {};
 
   template <typename T>
-  void VertexBufferLayout::push(unsigned int) {
-    static_assert(sizeof(T) == 0, "Unsupported type for VertexBufferLayout::push");
-  }
+  void push(unsigned int count);
 
-  template <>
-  inline void VertexBufferLayout::push<float>(unsigned int count) {
-    mElements.push_back({GL_FLOAT, count, GL_FALSE});
-    mStride += count * VertexBufferElement::getSizeOf(GL_FLOAT);
-  }
+  inline const std::vector<VertexBufferElement> &getElements() const { return mElements; };
+  inline const unsigned int getStride() const { return mStride; }
+};
 
-  template <>
-  inline void VertexBufferLayout::push<unsigned int>(unsigned int count) {
-    mElements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
-    mStride += count * VertexBufferElement::getSizeOf(GL_UNSIGNED_INT);
-  }
+template <typename T>
+void VertexBufferLayout::push(unsigned int) {
+  static_assert(sizeof(T) == 0, "Unsupported type for VertexBufferLayout::push");
+}
 
-  template <>
-  inline void VertexBufferLayout::push<unsigned char>(unsigned int count) {
-    mElements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
-    mStride += count * VertexBufferElement::getSizeOf(GL_UNSIGNED_BYTE);
-  }
+template <>
+inline void VertexBufferLayout::push<float>(unsigned int count) {
+  mElements.push_back({GL_FLOAT, count, GL_FALSE});
+  mStride += count * VertexBufferElement::getSizeOf(GL_FLOAT);
+}
+
+template <>
+inline void VertexBufferLayout::push<unsigned int>(unsigned int count) {
+  mElements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
+  mStride += count * VertexBufferElement::getSizeOf(GL_UNSIGNED_INT);
+}
+
+template <>
+inline void VertexBufferLayout::push<unsigned char>(unsigned int count) {
+  mElements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
+  mStride += count * VertexBufferElement::getSizeOf(GL_UNSIGNED_BYTE);
+}
 
 }  // namespace Engine
