@@ -1,6 +1,5 @@
 #pragma once
 #include "Renderer/Buffer.h"
-namespace Engine {
 
 class IndexBuffer : public Buffer {
 
@@ -15,5 +14,3 @@ public:
   void unbind() const override;
   void destroy() override;
 };
-
-};  // namespace Engine

@@ -1,4 +1,5 @@
 #pragma once
+#include "Renderer/Buffer.h"
 #include "pch.h"
 #include "Window.h"
 #include "Base.h"
@@ -6,6 +7,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Core/LayerStack.h"
 #include "Engine/ImGui/ImGuiLayer.h"
+#include "Platform/OpenGL/OpenGLbuffer.h"
 
 namespace Engine {
 
@@ -34,6 +36,10 @@ private:
   bool mRunning = true;
   ImGuiLayer *mImGuiLayer;
   LayerStack mLayerStack;
+
+  unsigned int mVAO, mVBO, mIBO;
+  Scope<VertexBuffer> vb;
+  Scope<IndexBuffer> ib;
 
   static Application *s_instance;
 };

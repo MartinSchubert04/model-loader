@@ -58,7 +58,8 @@ set(SOURCES
     Engine/src/pch.cpp
     
 
-    # Engine/src/Engine/Renderer/GLrenderer.cpp
+    Engine/src/Engine/Renderer/Buffer.cpp
+    Engine/src/Engine/Renderer/Renderer.cpp
     # Engine/src/Engine/Renderer/UIcontext.cpp
     # Engine/src/Engine/Renderer/VertexBuffer.cpp
     # Engine/src/Engine/Renderer/FrameBuffer.cpp
@@ -73,7 +74,7 @@ set(SOURCES
     # Engine/src/Engine/Core/CameraFPS.cpp
     # Engine/src/Engine/Core/Mesh.cpp
     # Engine/src/Engine/Core/Model.cpp
-    # Engine/src/Engine/Core/Shader.cpp
+    Engine/src/Engine/Core/Shader.cpp
     # Engine/src/Engine/Core/Texture.cpp
     
     Engine/src/Engine/ImGui/ImGuiLayer.cpp
@@ -82,6 +83,7 @@ set(SOURCES
     # Engine/src/Engine/ui/Panel.cpp
     
     Engine/src/Platform/OpenGL/OpenGLcontext.cpp
+    Engine/src/Platform/OpenGL/OpenGLbuffer.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/Platform/Windows/WindowsInput.cpp
 
