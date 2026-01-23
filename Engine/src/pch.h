@@ -27,6 +27,7 @@
 #include <sstream>
 #include <memory>
 #include <chrono>
+#include <cstdint>
 
 // GL includes
 #include <glad/glad.h>

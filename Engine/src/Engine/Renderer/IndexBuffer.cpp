@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "IndexBuffer.h"
 
-namespace render {
+namespace Engine {
 
 void IndexBuffer::create(const std::vector<unsigned int> &indices) {
   GLcall(glGenBuffers(1, &mIBO));
@@ -21,4 +21,4 @@ void IndexBuffer::unbind() const {
 void IndexBuffer::destroy() {
   GLcall(glDeleteBuffers(1, &mIBO));
 }
-}  // namespace render
+}  // namespace Engine

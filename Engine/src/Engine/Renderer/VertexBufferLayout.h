@@ -1,8 +1,8 @@
 #pragma once
 
 #include "pch.h"
-#include "renderer/Render.h"
-namespace render {
+
+namespace Engine {
 
 struct VertexBufferElement {
   unsigned int type;
@@ -62,4 +62,4 @@ inline void VertexBufferLayout::push<unsigned char>(unsigned int count) {
   mStride += count * VertexBufferElement::getSizeOf(GL_UNSIGNED_BYTE);
 }
 
-}  // namespace render
+}  // namespace Engine

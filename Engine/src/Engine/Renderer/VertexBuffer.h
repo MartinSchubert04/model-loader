@@ -1,8 +1,8 @@
 #pragma once
-
-#include "renderer/Render.h"
-
-namespace render {
+#include "pch.h"
+#include "Renderer/Buffer.h"
+#include "Core/Vertex.h"
+namespace Engine {
 
 class VertexBuffer : public Buffer {
 
@@ -16,4 +16,4 @@ public:
   virtual void destroy() override;
 };
 
-}  // namespace render
+}  // namespace Engine

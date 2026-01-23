@@ -1,7 +1,7 @@
 #include "FrameBuffer.h"
 #include "pch.h"
 
-namespace render {
+namespace Engine {
 
 void FrameBuffer::create(int32_t width, int32_t height) {
   mWidth = width;
@@ -73,4 +73,4 @@ uint32_t FrameBuffer::getTexture() const {
   return mTexId;
 }
 
-}  // namespace render
+}  // namespace Engine

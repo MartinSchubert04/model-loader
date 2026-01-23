@@ -126,9 +126,6 @@ void ImGuiLayer::onImGuiRender() {
 
   bool show = true;
 
-  ImGui::Begin("hola");
-  ImGui::End();
-
   ImGui::ShowDemoWindow(&show);
 }
 

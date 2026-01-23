@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "Renderer/VertexBuffer.h"
 
-namespace render {
+namespace Engine {
 
 void VertexBuffer::create(const std::vector<Vertex> &vertices) {
   GLcall(glGenBuffers(1, &mVBO));
@@ -21,4 +21,4 @@ void VertexBuffer::unbind() const {
 void VertexBuffer::destroy() {
   GLcall(glDeleteBuffers(1, &mVBO));
 }
-}  // namespace render
+}  // namespace Engine

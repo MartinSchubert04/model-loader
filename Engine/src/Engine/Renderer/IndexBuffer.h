@@ -1,10 +1,7 @@
 #pragma once
+#include "Renderer/Buffer.h"
 
-#include "renderer/Render.h"
-
-namespace render {
-
-class IndexBuffer : Buffer {
+class IndexBuffer : public Buffer {
 
 private:
   GLuint &mIBO = mRendererID;
@@ -17,5 +14,3 @@ public:
   void unbind() const override;
   void destroy() override;
 };
-
-};  // namespace render
