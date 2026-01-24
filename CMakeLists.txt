@@ -60,10 +60,10 @@ set(SOURCES
 
     Engine/src/Engine/Renderer/Buffer.cpp
     Engine/src/Engine/Renderer/Renderer.cpp
+    Engine/src/Engine/Renderer/VertexArray.cpp
     # Engine/src/Engine/Renderer/UIcontext.cpp
     # Engine/src/Engine/Renderer/VertexBuffer.cpp
     # Engine/src/Engine/Renderer/FrameBuffer.cpp
-    # Engine/src/Engine/Renderer/VertexArray.cpp
     # Engine/src/Engine/Renderer/IndexBuffer.cpp
 
     Engine/src/Engine/Core/Application.cpp
@@ -83,6 +83,7 @@ set(SOURCES
     # Engine/src/Engine/ui/Panel.cpp
     
     Engine/src/Platform/OpenGL/OpenGLcontext.cpp
+    Engine/src/Platform/OpenGL/OpenGLvertexArray.cpp
     Engine/src/Platform/OpenGL/OpenGLbuffer.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/Platform/Windows/WindowsInput.cpp

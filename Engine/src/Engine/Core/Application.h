@@ -8,6 +8,8 @@
 #include "Core/LayerStack.h"
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Platform/OpenGL/OpenGLbuffer.h"
+#include "Renderer/VertexArray.h"
+#include "Core/Shader.h"
 
 namespace Engine {
 
@@ -37,10 +39,10 @@ private:
   ImGuiLayer *mImGuiLayer;
   LayerStack mLayerStack;
 
-  unsigned int mVAO, mVBO, mIBO;
-  Scope<VertexBuffer> vb;
-  Scope<IndexBuffer> ib;
-
+  Ref<VertexBuffer> vb;
+  Ref<IndexBuffer> ib;
+  Scope<VertexArray> va;
+  Scope<Shader> mShader;
   static Application *s_instance;
 };
 

@@ -1,24 +1,22 @@
 #pragma once
 
-#include "Renderer/IndexBuffer.h"
-#include "Renderer/VertexBuffer.h"
-#include "Renderer/VertexBufferLayout.h"
+#include "Core/Base.h"
 #include "Renderer/Buffer.h"
 
 namespace Engine {
 
 class VertexArray {
-private:
-  unsigned int mVAO;
-
 public:
-  VertexArray();
+  virtual ~VertexArray() {}
 
-  void addBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout);
+  virtual void bind() const = 0;
+  virtual void unbind() const = 0;
 
-  void bind() const;
-  void unbind() const;
-  void destroy();
+  virtual void addVertexBuffer(const Ref<VertexBuffer> &vb) = 0;
+  virtual void setIndexBuffer(const Ref<IndexBuffer> &ib) = 0;
+  virtual Ref<IndexBuffer> &getIndexBuffer() = 0;
+
+  static Scope<VertexArray> create();
 };
 
 }  // namespace Engine

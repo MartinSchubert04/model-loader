@@ -28,7 +28,7 @@ struct BufferElement {
   BufferElement(Types::ShaderDataType type, const std::string &name, bool normalized = false) :
       name(name), type(type), size(Types::ShaderDataTypeSize(type)), offset(0), normalized(normalized) {};
 
-  uint32_t getElemenentCount() const {
+  uint32_t getElementCount() const {
     switch (type) {
     case Types::ShaderDataType::float1:
       return 1;
@@ -95,7 +95,7 @@ public:
   }
 
   inline const std::vector<BufferElement> &getElements() const { return mElements; }
-  inline const uint32_t &getStride() { return mStride; }
+  inline const uint32_t &getStride() const { return mStride; }
 
   inline std::vector<BufferElement>::iterator begin() { return mElements.begin(); }
   inline std::vector<BufferElement>::iterator end() { return mElements.end(); }
@@ -129,7 +129,7 @@ public:
   virtual void setLayout(const BufferLayout &layout) = 0;
   virtual const BufferLayout &getLayout() const = 0;
 
-  static Scope<VertexBuffer> create(float *vertices, uint32_t size);
+  static Ref<VertexBuffer> create(float *vertices, uint32_t size);
 };
 
 class IndexBuffer : public Buffer {

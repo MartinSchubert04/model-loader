@@ -6,7 +6,7 @@
 
 namespace Engine {
 
-Scope<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
+Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
 
   switch (Renderer::getAPI()) {
   case RendererAPI::None: {
@@ -16,7 +16,7 @@ Scope<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
   }
 
   case RendererAPI::OpenGL: {
-    return createScope<OpenGLvertexBuffer>(vertices, size);
+    return createRef<OpenGLvertexBuffer>(vertices, size);
     break;
   }
   }

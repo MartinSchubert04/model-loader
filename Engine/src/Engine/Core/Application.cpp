@@ -5,12 +5,12 @@
 #include "Events/Event.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/Types.h"
+#include "Renderer/VertexArray.h"
 #include "pch.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
 #include "Core/Input.h"
 #include "Editor/src/EditorLayer.h"
-#include "Core/Shader.h"
 namespace Engine {
 
 Application *Application::s_instance = nullptr;
@@ -26,8 +26,7 @@ Application::Application() {
   mImGuiLayer = new ImGuiLayer;
   pushOverlay(mImGuiLayer);
 
-  glGenVertexArrays(1, &mVAO);
-  glBindVertexArray(mVAO);
+  va = VertexArray::create();
 
   // std::vector<float> vertices = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5, 0.0f, 0.0f, 0.5f, 0.0f};
   float vertices[7 * 3] = {
@@ -36,24 +35,21 @@ Application::Application() {
   };
   vb = VertexBuffer::create(vertices, sizeof(vertices));
 
+  // fill layout with buffer elements then gets added to vertex array
   BufferLayout layout = {
       {Types::ShaderDataType::float3, "a_Pos"},
       {Types::ShaderDataType::float4, "a_Color"},
   };
 
   vb->setLayout(layout);
+  va->addVertexBuffer(vb);
 
   unsigned int indices[3] = {0, 1, 2};
   ib = IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
 
-  auto &vbLayout = vb->getLayout();
-  auto &elements = vbLayout.getElements();
-  for (unsigned int i{0}; i < elements.size(); i++) {
-    auto &e = elements[i];
-    glEnableVertexAttribArray(i);
-    glVertexAttribPointer(i, e.getElemenentCount(), e.getElementType(), e.normalized ? GL_TRUE : GL_FALSE,
-                          layout.getStride(), (const void *)e.offset);
-  }
+  va->setIndexBuffer(ib);
+
+  mShader = createScope<Shader>("Sim/Assets/shaders/triangle.vs", "Sim/Assets/shaders/triangle.fs");
 }
 
 Application::~Application() {}
@@ -67,16 +63,14 @@ void Application::run() {
   CORE_INFO("GLSL verson: {0}", (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
   CORE_INFO("GLFW version: {0}", glfwGetVersionString());
 
-  Shader shader("Sim/Assets/shaders/triangle.vs", "Sim/Assets/shaders/triangle.fs");
-
   while (mRunning) {
     glClearColor(.2, .2, .2, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    shader.use();
+    mShader->use();
 
-    glBindVertexArray(mVAO);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+    va->bind();
+    glDrawElements(GL_TRIANGLES, va->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 
     for (Layer *layer : mLayerStack)
       layer->onUpdate();
