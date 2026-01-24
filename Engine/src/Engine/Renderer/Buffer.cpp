@@ -3,20 +3,21 @@
 #include "Core/Base.h"
 #include "Platform/OpenGL/OpenGLbuffer.h"
 #include "Renderer.h"
+#include "RendererAPI.h"
 
 namespace Engine {
 
-Scope<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
+Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
 
   switch (Renderer::getAPI()) {
-  case RendererAPI::None: {
+  case RendererAPI::API::None: {
     CORE_ASSERT(false, "Renderer API: returning nullptr (NO RENDERER API PROVIDED)");
     return nullptr;
     break;
   }
 
-  case RendererAPI::OpenGL: {
-    return createScope<OpenGLvertexBuffer>(vertices, size);
+  case RendererAPI::API::OpenGL: {
+    return createRef<OpenGLvertexBuffer>(vertices, size);
     break;
   }
   }
@@ -28,13 +29,13 @@ Scope<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
 Scope<IndexBuffer> IndexBuffer::create(uint32_t *indices, uint32_t size) {
 
   switch (Renderer::getAPI()) {
-  case RendererAPI::None: {
+  case RendererAPI::API::None: {
     CORE_ASSERT(false, "Renderer API: returning nullptr (NO RENDERER API PROVIDED)");
     return nullptr;
     break;
   }
 
-  case RendererAPI::OpenGL: {
+  case RendererAPI::API::OpenGL: {
     return createScope<OpenGLindexBuffer>(indices, size);
     break;
   }

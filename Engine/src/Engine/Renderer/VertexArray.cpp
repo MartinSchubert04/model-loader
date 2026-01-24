@@ -1,39 +1,24 @@
-#include "Renderer/VertexArray.h"
-#include "Renderer/VertexBufferLayout.h"
+#include "Core/Base.h"
+#include "Renderer/Buffer.h"
 #include "pch.h"
-
+#include "Renderer/VertexArray.h"
+#include "Renderer.h"
+#include "Platform/OpenGL/OpenGLvertexArray.h"
 namespace Engine {
 
-VertexArray::VertexArray() {
-  GLcall(glGenVertexArrays(1, &mVAO));
-}
+Ref<VertexArray> VertexArray::create() {
+  switch (Renderer::getAPI()) {
+  case RendererAPI::API::None: {
+    CORE_ASSERT(false, "Renderer API: returning nullptr (NO RENDERER API PROVIDED)");
+    return nullptr;
+    break;
+  }
 
-void VertexArray::addBuffer(const VertexBuffer &vb, const VertexBufferLayout &layout) {
-  bind();
-  vb.bind();
-  const auto &elements = layout.getElements();
-  unsigned int offset = 0;
-
-  for (unsigned int i{0}; i < elements.size(); i++) {
-
-    const auto &element = elements[i];
-    GLcall(glEnableVertexAttribArray(i));
-    GLcall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(),
-                                 (const void *)(uintptr_t)offset));
-
-    offset += element.count * VertexBufferElement::getSizeOf(element.type);
+  case RendererAPI::API::OpenGL: {
+    return createRef<OpenGLvertexArray>();
+    break;
+  }
   }
 }
 
-void VertexArray::bind() const {
-  GLcall(glBindVertexArray(mVAO));
-}
-
-void VertexArray::unbind() const {
-  GLcall(glBindVertexArray(0));
-}
-
-void VertexArray::destroy() {
-  GLcall(glDeleteVertexArrays(1, &mVAO));
-}
 }  // namespace Engine

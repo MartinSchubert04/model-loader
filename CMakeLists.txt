@@ -58,14 +58,16 @@ set(SOURCES
     Engine/src/pch.cpp
     
 
+    # Renderer ( API agnostic)
     Engine/src/Engine/Renderer/Buffer.cpp
     Engine/src/Engine/Renderer/Renderer.cpp
-    # Engine/src/Engine/Renderer/UIcontext.cpp
-    # Engine/src/Engine/Renderer/VertexBuffer.cpp
-    # Engine/src/Engine/Renderer/FrameBuffer.cpp
-    # Engine/src/Engine/Renderer/VertexArray.cpp
-    # Engine/src/Engine/Renderer/IndexBuffer.cpp
+    Engine/src/Engine/Renderer/VertexArray.cpp
+    Engine/src/Engine/Renderer/RendererAPI.cpp
+    Engine/src/Engine/Renderer/RenderCommand.cpp
+    Engine/src/Engine/Renderer/Renderer.cpp
+    
 
+    # Core
     Engine/src/Engine/Core/Application.cpp
     Engine/src/Engine/Core/Window.cpp
     Engine/src/Engine/Core/Log.cpp
@@ -82,7 +84,10 @@ set(SOURCES
     # Engine/src/Engine/ui/Scene.cpp
     # Engine/src/Engine/ui/Panel.cpp
     
+    # Platform dependent
     Engine/src/Platform/OpenGL/OpenGLcontext.cpp
+    Engine/src/Platform/OpenGL/OpenGLrendererAPI.cpp
+    Engine/src/Platform/OpenGL/OpenGLvertexArray.cpp
     Engine/src/Platform/OpenGL/OpenGLbuffer.cpp
     Engine/src/Platform/Windows/WindowsWindow.cpp
     Engine/src/Platform/Windows/WindowsInput.cpp

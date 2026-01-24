@@ -1,8 +1,14 @@
 #include "Renderer.h"
-#include "pch.h"
 
 namespace Engine {
 
-RendererAPI Renderer::s_RendererAPI = RendererAPI::OpenGL;
+void Renderer::beginScene() {}
 
+void Renderer::endScene() {}
+
+void Renderer::submit(const Ref<VertexArray> &vertexArray) {
+  vertexArray->bind();
+  RenderCommand::drawIndexed(vertexArray);
 }
+
+}  // namespace Engine
