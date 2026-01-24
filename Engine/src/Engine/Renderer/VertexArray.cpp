@@ -6,16 +6,16 @@
 #include "Platform/OpenGL/OpenGLvertexArray.h"
 namespace Engine {
 
-Scope<VertexArray> VertexArray::create() {
+Ref<VertexArray> VertexArray::create() {
   switch (Renderer::getAPI()) {
-  case RendererAPI::None: {
+  case RendererAPI::API::None: {
     CORE_ASSERT(false, "Renderer API: returning nullptr (NO RENDERER API PROVIDED)");
     return nullptr;
     break;
   }
 
-  case RendererAPI::OpenGL: {
-    return createScope<OpenGLvertexArray>();
+  case RendererAPI::API::OpenGL: {
+    return createRef<OpenGLvertexArray>();
     break;
   }
   }

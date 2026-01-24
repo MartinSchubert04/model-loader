@@ -21,13 +21,13 @@ void OpenGLvertexArray::bind() const {
 void OpenGLvertexArray::unbind() const {
   glBindVertexArray(0);
 }
-void OpenGLvertexArray::addVertexBuffer(const Ref<VertexBuffer> &vb) {
-  CORE_ASSERT(vb->getLayout().getElements().size(), "Vertex Buffer has no layout!")
+void OpenGLvertexArray::addVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) {
+  CORE_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout!")
 
   glBindVertexArray(mRendererID);
-  vb->bind();
+  vertexBuffer->bind();
 
-  auto &layout = vb->getLayout();
+  auto &layout = vertexBuffer->getLayout();
   auto &elements = layout.getElements();
   for (unsigned int i{0}; i < elements.size(); i++) {
     auto &e = elements[i];
@@ -36,7 +36,7 @@ void OpenGLvertexArray::addVertexBuffer(const Ref<VertexBuffer> &vb) {
                           layout.getStride(), (const void *)e.offset);
   }
 
-  mVertexBuffers.push_back(vb);
+  mVertexBuffers.push_back(vertexBuffer);
 }
 void OpenGLvertexArray::setIndexBuffer(const Ref<IndexBuffer> &ib) {
   glBindVertexArray(mRendererID);

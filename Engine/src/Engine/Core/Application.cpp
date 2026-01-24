@@ -9,8 +9,8 @@
 #include "pch.h"
 #include "Core/Base.h"
 #include "Core/Log.h"
-#include "Core/Input.h"
-#include "Editor/src/EditorLayer.h"
+#include "Renderer/Renderer.h"
+
 namespace Engine {
 
 Application *Application::s_instance = nullptr;
@@ -64,13 +64,17 @@ void Application::run() {
   CORE_INFO("GLFW version: {0}", glfwGetVersionString());
 
   while (mRunning) {
-    glClearColor(.2, .2, .2, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
 
-    mShader->use();
+    RenderCommand::setClearColor({.2, .2, .2, 1});
+    RenderCommand::clear();
 
-    va->bind();
-    glDrawElements(GL_TRIANGLES, va->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+    Renderer::beginScene();
+
+    mShader->bind();
+
+    Renderer::submit(va);
+
+    Renderer::endScene();
 
     for (Layer *layer : mLayerStack)
       layer->onUpdate();

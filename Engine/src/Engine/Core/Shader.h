@@ -16,8 +16,8 @@ public:
   ~Shader();
   // activate the shader
   // ------------------------------------------------------------------------
-  void use() const;
-  void unload() const;
+  void bind() const;
+  void unbind() const;
 
   // utility uniform functions
   // ------------------------------------------------------------------------
@@ -34,8 +34,7 @@ public:
   void setVec3(const std::string &name, float x, float y, float z) const;
   // ------------------------------------------------------------------------
   void setVec4(const std::string &name, const glm::vec4 &value) const;
-  void setVec4(const std::string &name, float x, float y, float z,
-               float w) const;
+  void setVec4(const std::string &name, float x, float y, float z, float w) const;
   // ------------------------------------------------------------------------
   void setMat2(const std::string &name, const glm::mat2 &mat) const;
   // ------------------------------------------------------------------------

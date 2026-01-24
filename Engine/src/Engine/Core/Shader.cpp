@@ -56,14 +56,14 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
 }
 
 Shader::~Shader() {
-  unload();
+  glDeleteProgram(ID);
 }
 
-void Shader::use() const {
+void Shader::bind() const {
   glUseProgram(ID);
 }
-void Shader::unload() const {
-  glDeleteProgram(ID);
+void Shader::unbind() const {
+  glUseProgram(0);
 }
 
 void Shader::setBool(const std::string &name, bool value) const {

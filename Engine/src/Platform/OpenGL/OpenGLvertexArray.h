@@ -14,8 +14,8 @@ public:
   void bind() const override;
   void unbind() const override;
 
-  void addVertexBuffer(const Ref<VertexBuffer> &vb) override;
-  void setIndexBuffer(const Ref<IndexBuffer> &ib) override;
+  void addVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) override;
+  void setIndexBuffer(const Ref<IndexBuffer> &indexBuffer) override;
   Ref<IndexBuffer> &getIndexBuffer() override { return mIndexBuffer; }
 
 private:

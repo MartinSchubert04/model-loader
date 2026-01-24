@@ -1,14 +1,28 @@
 #pragma once
-#include "Renderer/||.h"
-
+#include "Core/Base.h"
+#include "Renderer/VertexArray.h"
+#include "pch.h"
 namespace Engine {
 
 class RendererAPI {
 
 public:
-  virtual void drawLines(VertexArray vertexArray, unsigned int vertexCount);
+  enum class API {
+    None = 0,
+    OpenGL = 1
 
-  virtual void drawArray(VertexArray vertexArray, unsigned int arrayIndices);
+  };
+
+public:
+  virtual void setClearColor(const glm::vec4 &color) = 0;
+  virtual void clear() = 0;
+
+  virtual void drawIndexed(const Ref<VertexArray> &vertexArray) = 0;
+
+  inline static API getAPI() { return s_API; }
+
+private:
+  static API s_API;
 };
 
 }  // namespace Engine

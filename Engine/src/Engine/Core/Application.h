@@ -41,7 +41,7 @@ private:
 
   Ref<VertexBuffer> vb;
   Ref<IndexBuffer> ib;
-  Scope<VertexArray> va;
+  Ref<VertexArray> va;
   Scope<Shader> mShader;
   static Application *s_instance;
 };
