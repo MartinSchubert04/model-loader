@@ -1,9 +1,9 @@
 #include "Model.h"
 #include "assimp/postprocess.h"
 #include "pch.h"
-#include "renderer/Render.h"
+"
 
-Model::Model(std::string path) {
+    Model::Model(std::string path) {
   loadModel(path);
 }
 

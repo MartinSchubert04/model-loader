@@ -1,4 +1,5 @@
 #pragma once
+#include "Renderer/Buffer.h"
 #include "pch.h"
 #include "Window.h"
 #include "Base.h"
@@ -6,6 +7,9 @@
 #include "Events/ApplicationEvent.h"
 #include "Core/LayerStack.h"
 #include "Engine/ImGui/ImGuiLayer.h"
+#include "Platform/OpenGL/OpenGLbuffer.h"
+#include "Renderer/VertexArray.h"
+#include "Core/Shader.h"
 
 namespace Engine {
 
@@ -33,9 +37,12 @@ private:
   Scope<Window> mWindow;  // only this class owns it
   bool mRunning = true;
   ImGuiLayer *mImGuiLayer;
-
   LayerStack mLayerStack;
 
+  Ref<VertexBuffer> vb;
+  Ref<IndexBuffer> ib;
+  Ref<VertexArray> va;
+  Scope<Shader> mShader;
   static Application *s_instance;
 };
 

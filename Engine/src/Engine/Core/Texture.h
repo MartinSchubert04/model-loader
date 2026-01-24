@@ -1,9 +1,9 @@
 #pragma once
 
 #include "pch.h"
-#include "renderer/Render.h"
+"
 
-class Texture {
+    class Texture {
 private:
   std::string mFilepath;
   unsigned char *mLocalBuff;
