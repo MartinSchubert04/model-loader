@@ -2,10 +2,11 @@
 
 #include "Input.h"
 #include "pch.h"
-#include "Shader.h"
+#include "Renderer/Shader.h"
 
 // Defines several possible options for camera movement
 
+namespace Engine {
 class Camera {
 public:
   float speed = 70.0f;
@@ -120,3 +121,4 @@ private:
 
   const float cRotationSpeed = 2.0f;
 };
+}  // namespace Engine

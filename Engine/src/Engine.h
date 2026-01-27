@@ -1,8 +1,18 @@
-#include "Core/Application.h"
-#include "Core/Layer.h"
-#include "Engine/ImGui/ImGuiLayer.h"
-#include "Platform/Windows/WindowsInput.h"
+#pragma once
 
-// link App with entry point -------
-#include "Engine/Core/EntryPoint.h"
-// ---------------------------------
+#include "Engine/Core/Application.h"
+#include "Engine/Core/Camera.h"
+#include "Engine/Core/Base.h"
+#include "Engine/Core/Input.h"
+#include "Engine/Core/Layer.h"
+#include "Engine/Core/DeltaTime.h"
+
+#include "Engine/Events/MouseCodes.h"
+#include "Engine/Events/KeyCodes.h"
+
+#include "Engine/ImGui/ImGuiLayer.h"
+
+#include "Engine/Renderer/Renderer.h"
+#include "Engine/Renderer/Shader.h"
+#include "Engine/Renderer/VertexArray.h"
+#include "Engine/Renderer/Buffer.h"

@@ -9,7 +9,7 @@
 #include "Engine/ImGui/ImGuiLayer.h"
 #include "Platform/OpenGL/OpenGLbuffer.h"
 #include "Renderer/VertexArray.h"
-#include "Core/Shader.h"
+#include "Renderer/Shader.h"
 
 namespace Engine {
 
@@ -39,10 +39,8 @@ private:
   ImGuiLayer *mImGuiLayer;
   LayerStack mLayerStack;
 
-  Ref<VertexBuffer> vb;
-  Ref<IndexBuffer> ib;
-  Ref<VertexArray> va;
-  Scope<Shader> mShader;
+  float mLastFrameTime = 0.0f;
+
   static Application *s_instance;
 };
 
