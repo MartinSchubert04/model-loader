@@ -6,6 +6,7 @@
 #include "Events/Event.h"
 #include "Events/KeyCodes.h"
 #include "Events/MouseCodes.h"
+#include "Events/MouseEVent.h"
 #include "Platform/Windows/WindowsInput.h"
 
 ApplicationLayer::ApplicationLayer() : Layer("App layer") {
@@ -39,21 +40,14 @@ ApplicationLayer::ApplicationLayer() : Layer("App layer") {
 
 void ApplicationLayer::onUpdate(Engine::DeltaTime dt) {
 
-  if (Engine::Input::isMouseButtonPressed(Engine::Mouse::ButtonRight)) {
-
-    auto pos = Engine::WindowsInput::getMousePos();
-
-    mCamera->onMouseMove(pos.x, pos.y, InputType::iRight);
-  }
-
   Engine::RenderCommand::setClearColor({.2, .2, .2, 1});
   Engine::RenderCommand::clear();
 
   Engine::Renderer::beginScene();
 
   mShader->bind();
-  glm::mat4 model = glm::mat4(1.0f);
 
+  glm::mat4 model = glm::mat4(1.0f);
   mShader->setMat4("model", model);
 
   mCamera->update(mShader.get());
@@ -68,11 +62,20 @@ void ApplicationLayer::onEvent(Engine::Event &e) {
   Engine::EventDispatcher dispatcher(e);
 
   dispatcher.dispatch<Engine::KeyPressedEvent>(BIND_FN(ApplicationLayer::onKeyPressdEvent));
+  dispatcher.dispatch<Engine::MouseMovedEvent>(BIND_FN(ApplicationLayer::onMouseMoved));
 }
 
 bool ApplicationLayer::onKeyPressdEvent(Engine::KeyPressedEvent &event) {
   if (event.getKeyCode() == Engine::Key::Escape) {
     close();
+  }
+
+  return false;
+}
+
+bool ApplicationLayer::onMouseMoved(Engine::MouseMovedEvent &event) {
+  if (Engine::Input::isMouseButtonPressed(Engine::Mouse::ButtonRight)) {
+    mCamera->onMouseMove(event.getX(), event.getY(), Engine::Mouse::ButtonRight);
   }
 
   return false;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Events/KeyCodes.h"
+#include "Events/MouseCodes.h"
 #include "Input.h"
 #include "pch.h"
 #include "Renderer/Shader.h"
@@ -66,10 +68,10 @@ public:
     updateViewMatrix();
   }
 
-  void onMouseMove(double x, double y, InputType button) {
+  void onMouseMove(double x, double y, MouseCode button) {
     glm::vec2 pos2d{x, y};
 
-    if (button == InputType::iRight) {
+    if (button == Mouse::ButtonRight) {
       glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.004f;
 
       float sign = getUp().y < 0 ? -1.0f : 1.0f;
@@ -77,7 +79,7 @@ public:
       mPitch += delta.y * cRotationSpeed;
 
       updateViewMatrix();
-    } else if (button == InputType::iMiddle) {
+    } else if (button == Mouse::ButtonLeft) {
       // TODO: Adjust pan speed for distance
       glm::vec2 delta = (pos2d - mCurrentPos2d) * 0.003f;
 

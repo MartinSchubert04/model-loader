@@ -10,6 +10,9 @@ public:
   void onEvent(Engine::Event &e) override;
 
   bool onKeyPressdEvent(Engine::KeyPressedEvent &e);
+  bool onMouseMoved(Engine::MouseMovedEvent &event);
+
+private:
   void close();
 
 private:
