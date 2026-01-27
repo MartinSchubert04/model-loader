@@ -141,7 +141,7 @@ public:
 
   virtual uint32_t getCount();
 
-  static Scope<IndexBuffer> create(uint32_t *indices, uint32_t size);
+  static Scope<IndexBuffer> create(std::vector<uint32_t> &indices);
 };
 
 }  // namespace Engine

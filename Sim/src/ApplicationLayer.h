@@ -9,14 +9,14 @@ public:
   void onUpdate(Engine::DeltaTime dt) override;
   void onEvent(Engine::Event &e) override;
 
-  bool onKeyPressdEvent(Engine::KeyPressedEvent &e);
+  bool onKeyPressedEvent(Engine::KeyPressedEvent &e);
   bool onMouseMoved(Engine::MouseMovedEvent &event);
 
 private:
   void close();
 
 private:
-  Engine::Scope<Engine::Shader> mShader;
+  Engine::Ref<Engine::Shader> mShader;
   Engine::Ref<Engine::VertexArray> vertexArray;
   Engine::Ref<Engine::VertexBuffer> vertexBuffer;
   Engine::Ref<Engine::IndexBuffer> indexBuffer;

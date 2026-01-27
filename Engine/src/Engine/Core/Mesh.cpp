@@ -1,6 +1,10 @@
 #include "Mesh.h"
-#include "Shader.h"
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
 #include "pch.h"
+#include <vector>
+
+namespace Engine {
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
            std::vector<std::shared_ptr<Texture>> textures) :
@@ -12,27 +16,25 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
   setupMesh();
 }
 
-Mesh::~Mesh() {
-  vb.destroy();
-  ib.destroy();
-  va.destroy();
-}
-
 void Mesh::setupMesh() {
 
-  VertexBufferLayout layout;
+  std::vector<glm::vec3> positions;
+  for (auto &v : vertices) {
+    positions.push_back(v.position);
+  }
 
-  vb.create(vertices);
-  ib.create(indices);
+  vb = VertexBuffer::create(vertices, vertices.size());
+  ib = IndexBuffer::create(indices);
 
-  va.bind();
-  ib.bind();
+  va->bind();
+  ib->bind();
 
-  layout.push<float>(3);  // position (location 0)
-  layout.push<float>(3);  // normal   (location 1)
-  layout.push<float>(2);  // texCoord (location 2)
-  layout.push<float>(4);  // color    (location 3)
-  layout.push<float>(1);  // useTex   (location 4)
+  Engine::BufferLayout layout = {
+      {Engine::Types::ShaderDataType::float3, "a_Pos"},
+      {Engine::Types::ShaderDataType::float3, "a_Normal"},
+      {Engine::Types::ShaderDataType::float2, "a_TextCoords"},
+      {Engine::Types::ShaderDataType::float4, "a_Color"},
+  };
 
   va.addBuffer(vb, layout);
 
@@ -76,3 +78,5 @@ void Mesh::draw(Shader &shader, DrawType type) {
 
   va.unbind();
 }
+
+}  // namespace Engine

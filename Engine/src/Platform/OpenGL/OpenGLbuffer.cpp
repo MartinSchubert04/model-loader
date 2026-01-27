@@ -32,11 +32,11 @@ void OpenGLvertexBuffer::unbind() const {
 // Index Buffer //////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-OpenGLindexBuffer::OpenGLindexBuffer(uint32_t *indices, uint32_t count) : mCount(count) {
+OpenGLindexBuffer::OpenGLindexBuffer(std::vector<uint32_t> &indices) : mCount(indices.size()) {
 
   glGenBuffers(1, &mRendererID);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererID);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
 }
 
 OpenGLindexBuffer::~OpenGLindexBuffer() {

@@ -2,12 +2,14 @@
 #include "Core/Application.h"
 #include "Core/DeltaTime.h"
 #include "Core/Input.h"
+#include "Core/Log.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/Event.h"
 #include "Events/KeyCodes.h"
 #include "Events/MouseCodes.h"
 #include "Events/MouseEVent.h"
 #include "Platform/Windows/WindowsInput.h"
+#include <vector>
 
 ApplicationLayer::ApplicationLayer() : Layer("App layer") {
 
@@ -29,8 +31,8 @@ ApplicationLayer::ApplicationLayer() : Layer("App layer") {
   vertexBuffer->setLayout(layout);
   vertexArray->addVertexBuffer(vertexBuffer);
 
-  unsigned int indices[3] = {0, 1, 2};
-  indexBuffer = Engine::IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t));
+  std::vector<uint32_t> indices = {0, 1, 2};
+  indexBuffer = Engine::IndexBuffer::create(indices);
 
   vertexArray->setIndexBuffer(indexBuffer);
 
@@ -47,8 +49,8 @@ void ApplicationLayer::onUpdate(Engine::DeltaTime dt) {
 
   mShader->bind();
 
-  glm::mat4 model = glm::mat4(1.0f);
-  mShader->setMat4("model", model);
+  Engine::Transform transform;
+  transform.setModel(mShader);
 
   mCamera->update(mShader.get());
 
@@ -61,11 +63,11 @@ void ApplicationLayer::onEvent(Engine::Event &e) {
 
   Engine::EventDispatcher dispatcher(e);
 
-  dispatcher.dispatch<Engine::KeyPressedEvent>(BIND_FN(ApplicationLayer::onKeyPressdEvent));
+  dispatcher.dispatch<Engine::KeyPressedEvent>(BIND_FN(ApplicationLayer::onKeyPressedEvent));
   dispatcher.dispatch<Engine::MouseMovedEvent>(BIND_FN(ApplicationLayer::onMouseMoved));
 }
 
-bool ApplicationLayer::onKeyPressdEvent(Engine::KeyPressedEvent &event) {
+bool ApplicationLayer::onKeyPressedEvent(Engine::KeyPressedEvent &event) {
   if (event.getKeyCode() == Engine::Key::Escape) {
     close();
   }

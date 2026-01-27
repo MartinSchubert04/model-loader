@@ -1,6 +1,5 @@
 #include "Planet.h"
-#include "pch.h"
-#include "glm/fwd.hpp"
+#include "Engine.h"
 #include <vector>
 
 Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :

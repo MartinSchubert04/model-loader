@@ -4,6 +4,7 @@
 #include "Platform/OpenGL/OpenGLbuffer.h"
 #include "Renderer.h"
 #include "RendererAPI.h"
+#include <vector>
 
 namespace Engine {
 
@@ -26,7 +27,7 @@ Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
   return nullptr;
 }
 
-Scope<IndexBuffer> IndexBuffer::create(uint32_t *indices, uint32_t size) {
+Scope<IndexBuffer> IndexBuffer::create(std::vector<uint32_t> &indices) {
 
   switch (Renderer::getAPI()) {
   case RendererAPI::API::None: {
@@ -36,7 +37,7 @@ Scope<IndexBuffer> IndexBuffer::create(uint32_t *indices, uint32_t size) {
   }
 
   case RendererAPI::API::OpenGL: {
-    return createScope<OpenGLindexBuffer>(indices, size);
+    return createScope<OpenGLindexBuffer>(indices);
     break;
   }
   }

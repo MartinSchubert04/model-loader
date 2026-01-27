@@ -21,7 +21,7 @@ private:
 
 class OpenGLindexBuffer : public IndexBuffer {
 public:
-  OpenGLindexBuffer(uint32_t *indices, uint32_t size);
+  OpenGLindexBuffer(std::vector<uint32_t> &indices);
   ~OpenGLindexBuffer();
 
   void bind() const override;
