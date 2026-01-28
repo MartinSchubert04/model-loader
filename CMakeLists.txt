@@ -74,10 +74,10 @@ set(SOURCES
     Engine/src/Engine/Core/Log.cpp
     Engine/src/Engine/Core/LayerStack.cpp
     Engine/src/Engine/Core/Layer.cpp
+    Engine/src/Engine/Core/Mesh.cpp
+    Engine/src/Engine/Core/Texture.cpp
     # Engine/src/Engine/Core/CameraFPS.cpp
-    # Engine/src/Engine/Core/Mesh.cpp
     # Engine/src/Engine/Core/Model.cpp
-    # Engine/src/Engine/Core/Texture.cpp
     
     Engine/src/Engine/ImGui/ImGuiLayer.cpp
     
@@ -93,7 +93,7 @@ set(SOURCES
     Engine/src/Platform/Windows/WindowsInput.cpp
 
     Sim/src/ApplicationLayer.cpp
-    # Sim/src/Planet.cpp
+    Sim/src/Planet.cpp
     # Sim/src/System.cpp
     # Sim/src/Solver.cpp
     # Sim/src/Grid.cpp

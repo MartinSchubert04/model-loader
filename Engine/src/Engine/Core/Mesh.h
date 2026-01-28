@@ -29,7 +29,7 @@ public:
 
 private:
   Ref<VertexBuffer> vb;
-  Scope<IndexBuffer> ib;
+  Ref<IndexBuffer> ib;
   Ref<VertexArray> va;
 
   void setupMesh();

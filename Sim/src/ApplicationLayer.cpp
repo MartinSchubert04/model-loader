@@ -1,26 +1,25 @@
 #include "ApplicationLayer.h"
-#include "Core/Application.h"
-#include "Core/DeltaTime.h"
-#include "Core/Input.h"
-#include "Core/Log.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/Event.h"
-#include "Events/KeyCodes.h"
-#include "Events/MouseCodes.h"
-#include "Events/MouseEVent.h"
-#include "Platform/Windows/WindowsInput.h"
-#include <vector>
+#include "Planet.h"
+#include "pch.h"
 
 ApplicationLayer::ApplicationLayer() : Layer("App layer") {
 
   vertexArray = Engine::VertexArray::create();
 
   // std::vector<float> vertices = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5, 0.0f, 0.0f, 0.5f, 0.0f};
-  float vertices[7 * 3] = {
-      -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.5f, -0.5, 0.0f, 1.0f,
-      0.0f,  0.0f,  1.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-  };
-  vertexBuffer = Engine::VertexBuffer::create(vertices, sizeof(vertices));
+  std::vector<glm::vec3> positions = {{-0.5f, -0.5f, 0.0f}, {0.5f, -0.5, 0.0f}, {0.0f, 0.5f, 0.0f}};
+  std::vector<glm::vec4> colors = {{1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}};
+  std::vector<Vertex> vertices;
+
+  for (unsigned int i{0}; i < 3; i++) {
+    Vertex v;
+    v.position = positions[i];
+    v.color = colors[i];
+
+    vertices.push_back(v);
+  }
+
+  vertexBuffer = Engine::VertexBuffer::create(vertices);
 
   // fill layout with buffer elements then gets added to vertex array
   Engine::BufferLayout layout = {
@@ -46,8 +45,12 @@ void ApplicationLayer::onUpdate(Engine::DeltaTime dt) {
   Engine::RenderCommand::clear();
 
   Engine::Renderer::beginScene();
+  glEnable(GL_DEPTH_TEST);
 
   mShader->bind();
+
+  Planet sphere(1, glm::vec2(12, 12), glm::vec3(0, 0, 0), 1);
+  sphere.draw(mShader);
 
   Engine::Transform transform;
   transform.setModel(mShader);
@@ -84,6 +87,7 @@ bool ApplicationLayer::onMouseMoved(Engine::MouseMovedEvent &event) {
 }
 
 void ApplicationLayer::close() {
+  // this event only triggers
   Engine::WindowCloseEvent e;
   Engine::Application::get().onEvent(e);
 }

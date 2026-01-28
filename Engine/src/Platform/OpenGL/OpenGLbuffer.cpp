@@ -1,7 +1,6 @@
 #include "OpenGLbuffer.h"
 #include "Renderer/Buffer.h"
 #include "pch.h"
-#include <cstdint>
 
 namespace Engine {
 
@@ -9,15 +8,15 @@ namespace Engine {
 // Vertex Buffer /////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-OpenGLvertexBuffer::OpenGLvertexBuffer(float *vertices, uint32_t size) {
+OpenGLvertexBuffer::OpenGLvertexBuffer(std::vector<Vertex> vertices) {
 
   glCreateBuffers(1, &mRendererID);
   glBindBuffer(GL_ARRAY_BUFFER, mRendererID);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 }
 
 OpenGLvertexBuffer::~OpenGLvertexBuffer() {
-  glDeleteBuffers(GL_ARRAY_BUFFER, &mRendererID);
+  glDeleteBuffers(1, &mRendererID);
 }
 
 void OpenGLvertexBuffer::bind() const {

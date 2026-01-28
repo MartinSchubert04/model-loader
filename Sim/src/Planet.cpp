@@ -1,6 +1,5 @@
 #include "Planet.h"
 #include "Engine.h"
-#include <vector>
 
 Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :
     radius(radius), segments(segments), position(pos), scaleFactor(1), speed(0.0f), acceleration(0.0f), mass(mass) {
@@ -22,8 +21,8 @@ Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :
       vertex.position = glm::vec3(xPos, yPos, zPos);
 
       // calculate normal
-      vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));
-      vertex.texCoords = glm::vec2(0.0f, 0.0f);
+      // vertex.normal = glm::normalize(glm::vec3(xPos, yPos, zPos));
+      // vertex.texCoords = glm::vec2(0.0f, 0.0f);
       vertex.color = color;
 
       vertices.push_back(vertex);
@@ -47,16 +46,17 @@ Planet::Planet(float radius, glm::vec2 segments, glm::vec3 pos, float mass) :
     }
   }
 
-  mesh = std::make_unique<Mesh>(vertices, indices, std::vector<std::shared_ptr<Texture>>{});
+  mesh = createScope<Mesh>(vertices, indices, std::vector<std::shared_ptr<Texture>>{});
 }
 
-void Planet::draw(Shader *shader) {
-  glm::mat4 model = glm::mat4(1.0f);
-  model = glm::translate(model, position);
-  model = glm::scale(model, glm::vec3(radius));
+void Planet::draw(Ref<Shader> shader) {
+  Engine::Transform transform;
 
-  shader->setMat4("model", model);
-  shader->setVec4("modelColor", color);
+  transform.scale(radius);
+  transform.translate(position);
+  transform.setModel(shader);
+
+  // shader->setVec4("modelColor", color);
 
   mesh->draw(*shader);
 }

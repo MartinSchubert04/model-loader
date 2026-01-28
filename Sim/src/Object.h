@@ -11,8 +11,8 @@ protected:
   std::vector<unsigned int> indices;
 
 public:
-  std::unique_ptr<Mesh> mesh;
+  Scope<Mesh> mesh;
 
   virtual void update(glm::vec3 force, float delta) = 0;
-  virtual void draw(Shader *shader) = 0;
+  virtual void draw(Ref<Shader> shader) = 0;
 };

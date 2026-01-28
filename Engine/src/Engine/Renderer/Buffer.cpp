@@ -8,7 +8,7 @@
 
 namespace Engine {
 
-Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
+Ref<VertexBuffer> VertexBuffer::create(std::vector<Vertex> vertices) {
 
   switch (Renderer::getAPI()) {
   case RendererAPI::API::None: {
@@ -18,7 +18,7 @@ Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size) {
   }
 
   case RendererAPI::API::OpenGL: {
-    return createRef<OpenGLvertexBuffer>(vertices, size);
+    return createRef<OpenGLvertexBuffer>(vertices);
     break;
   }
   }
